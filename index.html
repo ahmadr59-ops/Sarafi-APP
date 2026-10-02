@@ -229,7 +229,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 //   • Guarantee cheques are never payments.
 //   • Partner settlement is on a CASH basis per Jalali year.
 // ============================================================
-const APP_VERSION='v1.0';
+const APP_VERSION='v1.1';
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const MFA=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const MSH=['فرو','ارد','خرد','تیر','مرد','شهر','مهر','آبا','آذر','دی','بهم','اسف'];
@@ -289,11 +289,11 @@ function fmtM(idx){return `${MFA[idx%12]} ${toFa(Math.floor(idx/12))}`;}
 //         • cost basis = moving average (opening + confirmed buys, at the agreed toman);
 //         • a sell realises (its toman − average cost × €); revaluation is never income.
 // ============================================================
-function def(){return{v:1,settings:{theme:'auto',lastBackup:0},opening:null,rates:[],deals:[],counts:[]};}
+function def(){return{v:1,settings:{theme:'auto',lastBackup:0},opening:null,rates:[],deals:[],counts:[],bridge:[],bridgeDone:{}};}
 let ST=def();
 function normalize(s){
   const o=Object.assign(def(),s||{});o.settings=Object.assign(def().settings,o.settings||{});
-  ['rates','deals','counts'].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[];});
+  ['rates','deals','counts','bridge'].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[];});if(!o.bridgeDone||typeof o.bridgeDone!=='object')o.bridgeDone={};
   o.deals.forEach(d=>{if(!Array.isArray(d.pays))d.pays=[];});
   return o;
 }
@@ -332,6 +332,15 @@ function addPay(dealId,p){const d=byId(ST.deals,dealId);if(!d)throw new Error('�
 function setEurDone(dealId,done,date){const d=byId(ST.deals,dealId);d.eurDone=!!done;d.eurDate=done?(date||today()):null;}
 function addRate(rate,date){const r=+rate;if(!(r>0))throw new Error('نرخ نامعتبر است');ST.rates.push({id:uid(),date:date||today(),rate:r,at:Date.now()});}
 function addCount(eur,date,note){const v=vault();const c={id:uid(),date:date||today(),eur:+eur,expected:v.eur,note:note||'',at:Date.now()};ST.counts.push(c);return c;}
+// Net euro position in toman — what «سرمایه»'s «ارز (یورو)» account should hold, given that Sarmaye
+// moves tomans when they are paid while the safe changes only when Sahar confirms.
+function bridgeTarget(){
+  const v=vault();let t=v.mkt?v.value:v.cost;
+  ST.deals.forEach(d=>{const pd=paidT(d),rem=Math.max(0,remT(d));
+    if(d.kind==='buy'){if(d.eurDone)t-=rem;else t+=pd;}else{if(d.eurDone)t+=rem;else t-=pd;}});
+  return Math.round(t);
+}
+const bridgeReady=()=>!!(ST.opening&&ST.opening.eur>0);
 function monthSummary(y,m){
   const L=ST.deals.filter(d=>d.date.y===y&&d.date.m===m);
   return{buyE:L.filter(d=>d.kind==='buy').reduce((s,d)=>s+d.eur,0),buyT:L.filter(d=>d.kind==='buy').reduce((s,d)=>s+tom(d),0),
@@ -351,7 +360,7 @@ async function dbSet(k,v){const db=await idb();return new Promise((res,rej)=>{co
 async function loadState(){try{ST=normalize(await dbGet('state'));}catch(e){try{ST=normalize(JSON.parse(localStorage.getItem('sarafi_state')||'null'));}catch(_){ST=def();}}}
 let UNDO=null;
 async function sv(){const snap=JSON.parse(JSON.stringify(ST));try{await dbSet('state',snap);}catch(e){try{localStorage.setItem('sarafi_state',JSON.stringify(snap));}catch(_){ntf('ذخیره انجام نشد');}}
-  if(typeof ghSchedule==='function')ghSchedule();}
+  if(typeof ghSchedule==='function')ghSchedule();if(typeof schedulePublish==='function')schedulePublish();}
 async function commit(fn,msg){const before=JSON.stringify(ST);try{fn();}catch(e){ntf(e.message);return false;}UNDO=before;await sv();closeSheet();render();ntf(msg,true);return true;}
 async function undo(){if(!UNDO)return;ST=normalize(JSON.parse(UNDO));UNDO=null;await sv();render();ntf('بازگردانی شد');}
 function ntf(m,canUndo){const t=$('toast');t.innerHTML=esc(m)+(canUndo?' <button onclick="undo()" style="margin-inline-start:10px;background:none;border:0;color:inherit;font:inherit;font-weight:800;text-decoration:underline">↶ بازگردانی</button>':'');
@@ -402,6 +411,7 @@ function vHome(){
     <p class="hero-s">ارزش روز: <b>${mask(v.mkt?nf(v.value)+' تومان':'— (نرخ ثبت نشده)')}</b></p>
     <div class="hkpis"><div><small>میانگین بهای هر یورو</small><b>${mask(nf(v.avg))}</b></div><div><small>نرخ روز</small><b>${r?nf(r.rate):'—'}</b></div><div><small>سود/زیان ارزش</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':mask((v.unreal<0?'−':'+')+nf(Math.abs(v.unreal)))}</b></div></div>
   </section>
+  ${ST.bridge.length?`<h3 class="sec">پرداخت‌های ارسالی از «سرمایه»</h3><div class="list">${ST.bridge.map(b=>`<button class="row tap" onclick="openSfBridge('${b.id}')"><span class="ri r-up">${svg(b.kind==='pay'?'out':'in')}</span><div class="rb"><b>${b.kind==='pay'?'پرداخت':'دریافت'} ${nf(b.a)} تومان</b><small>${esc(b.bank||'')}${b.acc?' · '+esc(b.acc):''} · ${fmtD(b.date)} — لمس کنید تا به معامله وصل شود</small></div></button>`).join('')}</div>`:''}
   <h3 class="sec">کارهای من</h3><div class="list">${rows.length?rows.join(''):`<div class="row"><span class="ri r-ok">${svg('ok')}</span><div class="rb"><b>کاری باقی نمانده است</b></div></div>`}</div>
   <h3 class="sec">معاملات باز</h3>${open.length?`<div class="list">${open.map(dealRow).join('')}</div>`:'<p class="dim">معاملهٔ بازی ندارید.</p>'}
   <button class="btn pri" onclick="openDeal()">➕ معاملهٔ جدید</button>`;
@@ -469,6 +479,19 @@ async function savePay(id){const date=readDate('p_date');if(!date)return errIn('
 async function delPay(id,pid){if(!confirm('این ردیف حذف شود؟'))return;await commit(()=>{const d=byId(ST.deals,id);d.pays=d.pays.filter(p=>p.id!==pid);},'ردیف حذف شد');openDealView(id);}
 async function shareDeal(id){const d=byId(ST.deals,id);const txt=`${kindL(d)}: ${eu(d.eur)}\nنرخ: ${nf(d.rate)} تومان\nمبلغ: ${nf(tom(d))} تومان\nتاریخ: ${fmtD(d.date)}\nپرداخت/دریافت: ${nf(paidT(d))} — مانده ${nf(Math.max(0,remT(d)))}`;
   try{if(navigator.share)await navigator.share({text:txt});else{await navigator.clipboard.writeText(txt);ntf('متن کپی شد');}}catch(e){}}
+// ---------------- v1.1: payments sent from «سرمایه» ----------------
+function openSfBridge(id){
+  const b=ST.bridge.find(x=>x.id===id);if(!b)return;const kind=b.kind==='pay'?'buy':'sell';
+  const L=ST.deals.filter(d=>d.kind===kind&&remT(d)>0).sort((p,q)=>Math.abs(remT(p)-b.a)-Math.abs(remT(q)-b.a));
+  openSheet(`${sheetHead((b.kind==='pay'?'پرداخت ':'دریافت ')+nf(b.a)+' تومان',esc(b.bank||'')+' · '+fmtD(b.date))}
+  <p class="dim">این ${b.kind==='pay'?'پرداخت':'دریافت'} مربوط به کدام معامله است؟ معاملهٔ هم‌مبلغ بالای فهرست است.</p>
+  ${L.length?`<div class="list">${L.map(d=>`<button class="row tap" onclick="sfAssign('${id}','${d.id}')"><div class="rb"><b>${esc(d.party||'بدون نام')} · ${eu(d.eur)}</b><small>${fmtD(d.date)} · مانده ${nf(remT(d))} تومان${remT(d)===b.a?' · ✓ هم‌مبلغ':''}</small></div></button>`).join('')}</div>`:'<p class="note">معاملهٔ بازی با این نوع نیست. اول معامله را ثبت کنید، بعد دوباره همین‌جا بزنید.</p>'}
+  <div class="acts"><button class="btn" onclick="closeSheet();openDeal()">معاملهٔ جدید</button><button class="btn" onclick="sfIgnore('${id}')">نادیده</button></div>`);
+}
+async function sfAssign(id,dealId){const b=ST.bridge.find(x=>x.id===id);if(!b)return;
+  const ok=await commit(()=>{addPay(dealId,{date:b.date,amount:b.a,ref:[b.bank,b.acc].filter(Boolean).join(' · '),force:true});ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'به معامله وصل شد');
+  if(ok)sfInboxRemove(id).catch(()=>{});}
+async function sfIgnore(id){const ok=await commit(()=>{ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'نادیده گرفته شد');if(ok)sfInboxRemove(id).catch(()=>{});}
 // ---------------- Rate / opening / count ----------------
 function openRate(){const r=lastRate();openSheet(`${sheetHead('نرخ روز یورو','نرخ بازار آزاد (مثلاً از اپ «چند»)')}
   ${field('نرخ هر یورو (تومان)',money('r_v',r?r.rate:0))}${field('تاریخ',dateIn('r_d',today()))}<button class="btn pri" onclick="saveRate()">ثبت</button>
@@ -510,6 +533,7 @@ function openSettings(){const s=ST.settings;openSheet(`${sheetHead('تنظیما
   ${field('حالت نمایش',`<select id="st_th"><option value="auto"${s.theme==='auto'?' selected':''}>خودکار</option><option value="light"${s.theme==='light'?' selected':''}>روشن</option><option value="dark"${s.theme==='dark'?' selected':''}>تیره</option></select>`)}
   <button class="btn pri" onclick="saveSettings()">ذخیره</button>
   <div class="divider"></div><h3 class="sec m0">پشتیبان GitHub (بدون VPN)</h3><p class="dim" id="gh-status">${ghStatusText()}</p><button class="btn" onclick="openGhSheet()">تنظیم پشتیبان GitHub</button>
+  <div class="divider"></div><h3 class="sec m0">اتصال به «سرمایه»</h3><p class="dim">${!ghOn()?'نیاز به پشتیبان GitHub دارد':bridgeReady()?'فعال — ارزش خالص یورو برای حساب «ارز (یورو)» سرمایه ارسال می‌شود':'منتظر ثبت موجودی اولیه (تعداد یورو)؛ تا آن موقع چیزی ارسال نمی‌شود'}</p>
   <div class="divider"></div><h3 class="sec m0">فایل پشتیبان</h3><div class="acts"><button class="btn" onclick="doBackup()">تهیهٔ فایل پشتیبان</button>
   <label class="btn" style="position:relative">بازیابی از فایل<input type="file" accept=".json,application/json" onchange="restoreFile(this)" style="position:absolute;inset:0;opacity:0"></label></div>`);}
 async function saveSettings(){ST.settings.theme=val('st_th');applyTheme();await sv();closeSheet();ntf('ذخیره شد');}
@@ -525,6 +549,8 @@ async function boot(){
   if(window.matchMedia)matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(ST.settings.theme==='auto')applyTheme();});
   const t=today();$('hdate').textContent=`${t.wd||''} ${fmtD(t)}`;render();
   setTimeout(()=>{if(ghOn()&&(Date.now()-(+localStorage.getItem(GH_LAST)||0))>6*3600e3)ghBackup(true);},6000);
+  setTimeout(()=>{if(ghOn()){fetchSfInbox();publishStatus().catch(()=>{});}},3000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&ghOn())fetchSfInbox();});
   if('serviceWorker' in navigator&&location.protocol.startsWith('http'))navigator.serviceWorker.register('sw.js').catch(()=>{});
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeSheet();});
@@ -561,6 +587,31 @@ async function ghBackup(silent){
     localStorage.setItem(GH_LAST,String(Date.now()));const el=$('gh-status');if(el)el.textContent=ghStatusText();
     if(!silent)ntf('پشتیبان در GitHub ذخیره شد');return true;
   }catch(e){if(!silent)ntf('پشتیبان GitHub: '+(e.message||'اتصال برقرار نشد'));return false;}finally{ghBusy=false;}}
+// v1.1 — bridge with «سرمایه» (same private repo)
+async function ghFileRead(file){const g=await ghFetch('/contents/'+file);if(g.status===404)return{sha:null,data:null};if(!g.ok)throw new Error(ghErr(g));
+  const j=await g.json();let data=null;try{data=JSON.parse(new TextDecoder().decode(s2b(j.content.replace(/\n/g,''))));}catch(e){}return{sha:j.sha,data};}
+async function ghFileWrite(file,obj,msg,sha){return ghFetch('/contents/'+file,{method:'PUT',body:JSON.stringify({message:msg,content:b2s(new TextEncoder().encode(JSON.stringify(obj))),sha:sha||undefined})});}
+async function fetchSfInbox(){
+  if(!ghOn())return 0;
+  try{const {data}=await ghFileRead('sarafi-inbox.json');const items=(data&&data.items)||{};let n=0;
+    Object.values(items).forEach(it=>{if(!ST.bridgeDone[it.id]&&!ST.bridge.some(b=>b.id===it.id)){ST.bridge.push(it);n++;}});
+    if(n){await sv();render();}return n;}catch(e){return 0;}
+}
+async function sfInboxRemove(id){
+  for(let i=0;i<3;i++){const {sha,data}=await ghFileRead('sarafi-inbox.json');if(!data||!data.items||!data.items[id])return true;delete data.items[id];
+    const p=await ghFileWrite('sarafi-inbox.json',data,'صندوق صرافی — ثبت شد',sha);if(p.ok)return true;if(p.status!==409&&p.status!==422)return false;}
+  return false;
+}
+let pubTimer=null;
+async function publishStatus(){
+  if(!ghOn()||!bridgeReady())return false;const v=vault();
+  const st={target:bridgeTarget(),eur:v.eur,mkt:v.mkt,value:v.value,cost:v.cost,ready:true,at:Date.now()};
+  for(let i=0;i<3;i++){const {sha}=await ghFileRead('sarafi-status.json');const p=await ghFileWrite('sarafi-status.json',st,'وضعیت صرافی',sha);if(p.ok)return true;if(p.status!==409&&p.status!==422)return false;}
+  return false;
+}
+function schedulePublish(){if(!ghOn())return;clearTimeout(pubTimer);pubTimer=setTimeout(()=>publishStatus().catch(()=>{}),20000);}
+function copyTok(id){const v=val(id);if(!v)return ntf('توکنی وارد نشده');
+  (navigator.clipboard?navigator.clipboard.writeText(v):Promise.reject()).then(()=>ntf('توکن کپی شد؛ در اپ دیگر بچسبانید')).catch(()=>{const el=$(id);el.type='text';el.select();ntf('توکن را انتخاب و کپی کنید');});}
 function ghSchedule(){if(!ghOn())return;clearTimeout(ghTimer);ghTimer=setTimeout(()=>ghBackup(true),15000);}
 function ghStatusText(){if(!ghOn())return 'غیرفعال — بدون VPN کار می‌کند';const c=ghCfg();const l=+localStorage.getItem(GH_LAST)||0;
   return `فعال — ${c.owner}/${c.repo}${c.pass?'، رمزنگاری‌شده':''}؛ `+(l?'آخرین پشتیبان '+new Date(l).toLocaleString('fa-IR'):'هنوز پشتیبانی ثبت نشده');}
@@ -571,6 +622,7 @@ function openGhSheet(){
   ${field('نام کاربری GitHub',`<input id="gh-owner" dir="ltr" value="${esc(c.owner||'ahmadr59-ops')}">`)}
   ${field('نام ریپو',`<input id="gh-repo" dir="ltr" value="${esc(c.repo||'sarmaye-backup')}">`)}
   ${field('توکن دسترسی',`<input id="gh-token" type="password" dir="ltr" value="${esc(c.token||'')}">`,'فقط روی همین دستگاه ذخیره می‌شود')}
+  <button class="btn" onclick="copyTok('gh-token')">📋 کپی توکن (برای «سرمایه» و «املاک»)</button>
   ${field('رمز رمزنگاری (اختیاری)',`<input id="gh-pass" type="password" dir="ltr" value="${esc(c.pass||'')}">`,'اگر فراموش شود، پشتیبان‌ها قابل بازیابی نیستند')}
   <button class="btn pri" onclick="saveGh()">ذخیره و آزمایش اتصال</button>
   <div class="acts"><button class="btn" onclick="ghBackup(false)">پشتیبان الان</button><button class="btn" onclick="ghHist()">نسخه‌ها و بازیابی</button></div>
