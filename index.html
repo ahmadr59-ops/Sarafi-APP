@@ -229,7 +229,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 //   • Guarantee cheques are never payments.
 //   • Partner settlement is on a CASH basis per Jalali year.
 // ============================================================
-const APP_VERSION='v1.1';
+const APP_VERSION='v1.2';
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const MFA=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const MSH=['فرو','ارد','خرد','تیر','مرد','شهر','مهر','آبا','آذر','دی','بهم','اسف'];
@@ -340,7 +340,8 @@ function bridgeTarget(){
     if(d.kind==='buy'){if(d.eurDone)t-=rem;else t+=pd;}else{if(d.eurDone)t+=rem;else t-=pd;}});
   return Math.round(t);
 }
-const bridgeReady=()=>!!(ST.opening&&ST.opening.eur>0);
+// ready once real euros are on record: an opening balance OR at least one confirmed deal (history entered deal by deal)
+const bridgeReady=()=>!!(ST.opening&&(ST.opening.eur>0||ST.deals.some(d=>d.eurDone)));
 function monthSummary(y,m){
   const L=ST.deals.filter(d=>d.date.y===y&&d.date.m===m);
   return{buyE:L.filter(d=>d.kind==='buy').reduce((s,d)=>s+d.eur,0),buyT:L.filter(d=>d.kind==='buy').reduce((s,d)=>s+tom(d),0),
@@ -533,7 +534,7 @@ function openSettings(){const s=ST.settings;openSheet(`${sheetHead('تنظیما
   ${field('حالت نمایش',`<select id="st_th"><option value="auto"${s.theme==='auto'?' selected':''}>خودکار</option><option value="light"${s.theme==='light'?' selected':''}>روشن</option><option value="dark"${s.theme==='dark'?' selected':''}>تیره</option></select>`)}
   <button class="btn pri" onclick="saveSettings()">ذخیره</button>
   <div class="divider"></div><h3 class="sec m0">پشتیبان GitHub (بدون VPN)</h3><p class="dim" id="gh-status">${ghStatusText()}</p><button class="btn" onclick="openGhSheet()">تنظیم پشتیبان GitHub</button>
-  <div class="divider"></div><h3 class="sec m0">اتصال به «سرمایه»</h3><p class="dim">${!ghOn()?'نیاز به پشتیبان GitHub دارد':bridgeReady()?'فعال — ارزش خالص یورو برای حساب «ارز (یورو)» سرمایه ارسال می‌شود':'منتظر ثبت موجودی اولیه (تعداد یورو)؛ تا آن موقع چیزی ارسال نمی‌شود'}</p>
+  <div class="divider"></div><h3 class="sec m0">اتصال به «سرمایه»</h3><p class="dim">${!ghOn()?'نیاز به پشتیبان GitHub دارد':bridgeReady()?'فعال — ارزش خالص یورو برای حساب «ارز (یورو)» سرمایه ارسال می‌شود':'منتظر ثبت موجودی اولیه یا اولین معاملهٔ تأییدشده؛ تا آن موقع چیزی ارسال نمی‌شود'}</p>
   <div class="divider"></div><h3 class="sec m0">فایل پشتیبان</h3><div class="acts"><button class="btn" onclick="doBackup()">تهیهٔ فایل پشتیبان</button>
   <label class="btn" style="position:relative">بازیابی از فایل<input type="file" accept=".json,application/json" onchange="restoreFile(this)" style="position:absolute;inset:0;opacity:0"></label></div>`);}
 async function saveSettings(){ST.settings.theme=val('st_th');applyTheme();await sv();closeSheet();ntf('ذخیره شد');}
