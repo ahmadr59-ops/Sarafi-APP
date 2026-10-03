@@ -198,6 +198,13 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 .tabs .plus svg{stroke:#fff;width:26px;height:26px}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.ratebox{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px;margin:12px 0}
+.ratebox.stale{border-color:#D98E04;background:linear-gradient(0deg,rgba(217,142,4,.07),rgba(217,142,4,.07)),var(--card)}
+.rb-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.rb-top small{flex-basis:100%;font-size:12.5px;color:var(--ink2,#5B6478)}
+.rb-top b{font-size:26px;font-weight:800;font-variant-numeric:tabular-nums}.rb-top em{font-style:normal;font-size:12.5px;color:var(--ink2,#5B6478)}
+.rb-in{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:10px}.rb-in .btn{margin:0;padding:0 18px}
+.rb-in input{width:100%;padding:11px 12px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg,#fff);font-size:16px}
+.rb-warn{margin:10px 0 0;font-size:13px;font-weight:700;color:#B26F00}
 </style>
 </head>
 <body>
@@ -229,7 +236,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 //   • Guarantee cheques are never payments.
 //   • Partner settlement is on a CASH basis per Jalali year.
 // ============================================================
-const APP_VERSION='v1.2';
+const APP_VERSION='v1.3';
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const MFA=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const MSH=['فرو','ارد','خرد','تیر','مرد','شهر','مهر','آبا','آذر','دی','بهم','اسف'];
@@ -403,15 +410,15 @@ function vHome(){
   e.eurOwedMe.forEach(x=>rows.push(row('late',`یورویی که طلبکارم — ${esc(x.d.party||'بدون نام')}`,`${eu(x.amt)}؛ تومان پرداخت شده، سحر هنوز تأیید نکرده`,`openDealView('${x.d.id}')`,'تأیید')));
   e.owedMe.forEach(x=>rows.push(row('up',`تومانی که طلبکارم — ${esc(x.d.party||'بدون نام')}`,`${nf(x.amt)} تومان؛ یورو تحویل شده`,`openDealView('${x.d.id}')`,'دریافت')));
   e.eurIOwe.forEach(x=>rows.push(row('up',`یورویی که بدهکارم — ${esc(x.d.party||'بدون نام')}`,`${eu(x.amt)}؛ تومان دریافت شده، یورو هنوز تحویل نشده`,`openDealView('${x.d.id}')`,'تحویل')));
-  if(stale)rows.push(row('rate','نرخ امروز وارد نشده',r?`آخرین نرخ: ${nf(r.rate)} (${fmtD(r.date)})`:'هنوز نرخی ثبت نشده','openRate()','ثبت نرخ'));
   const open=ST.deals.filter(d=>!isDone(d)).sort((a,b)=>cmpD(b.date,a.date));
   return `<section class="hero">
     <div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">موجودی صندوق نزد سحر</p>
       <button class="eye" onclick="SHOW=!SHOW;render()" aria-label="نمایش یا پنهان کردن">${SHOW?'🙈':'👁'}</button></div>
     <p class="hero-n">${mask(eu(v.eur))}</p>
-    <p class="hero-s">ارزش روز: <b>${mask(v.mkt?nf(v.value)+' تومان':'— (نرخ ثبت نشده)')}</b></p>
+    <p class="hero-s">ارزش روز: <b>${mask(v.mkt?nf(v.value)+' تومان':'— (نرخ ثبت نشده)')}</b>${r?` · با نرخ ${nf(r.rate)} (${rateAge(r)})`:''}</p>
     <div class="hkpis"><div><small>میانگین بهای هر یورو</small><b>${mask(nf(v.avg))}</b></div><div><small>نرخ روز</small><b>${r?nf(r.rate):'—'}</b></div><div><small>سود/زیان ارزش</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':mask((v.unreal<0?'−':'+')+nf(Math.abs(v.unreal)))}</b></div></div>
   </section>
+  ${rateCard()}
   ${ST.bridge.length?`<h3 class="sec">پرداخت‌های ارسالی از «سرمایه»</h3><div class="list">${ST.bridge.map(b=>`<button class="row tap" onclick="openSfBridge('${b.id}')"><span class="ri r-up">${svg(b.kind==='pay'?'out':'in')}</span><div class="rb"><b>${b.kind==='pay'?'پرداخت':'دریافت'} ${nf(b.a)} تومان</b><small>${esc(b.bank||'')}${b.acc?' · '+esc(b.acc):''} · ${fmtD(b.date)} — لمس کنید تا به معامله وصل شود</small></div></button>`).join('')}</div>`:''}
   <h3 class="sec">کارهای من</h3><div class="list">${rows.length?rows.join(''):`<div class="row"><span class="ri r-ok">${svg('ok')}</span><div class="rb"><b>کاری باقی نمانده است</b></div></div>`}</div>
   <h3 class="sec">معاملات باز</h3>${open.length?`<div class="list">${open.map(dealRow).join('')}</div>`:'<p class="dim">معاملهٔ بازی ندارید.</p>'}
@@ -493,11 +500,25 @@ async function sfAssign(id,dealId){const b=ST.bridge.find(x=>x.id===id);if(!b)re
   const ok=await commit(()=>{addPay(dealId,{date:b.date,amount:b.a,ref:[b.bank,b.acc].filter(Boolean).join(' · '),force:true});ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'به معامله وصل شد');
   if(ok)sfInboxRemove(id).catch(()=>{});}
 async function sfIgnore(id){const ok=await commit(()=>{ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'نادیده گرفته شد');if(ok)sfInboxRemove(id).catch(()=>{});}
+// ---------------- v1.3: today's rate on Home (optional, latest entry always wins) ----------------
+function rateAge(r){if(!r)return'';const dd=dayNum(today())-dayNum(r.date);
+  if(dd<=0){const h=r.at?new Date(r.at):null;return 'امروز'+(h&&dd===0?' ساعت '+toFa(String(h.getHours()).padStart(2,'0')+':'+String(h.getMinutes()).padStart(2,'0')):'');}
+  return dd===1?'دیروز':toFa(dd)+' روز پیش';}
+function rateCard(){
+  const r=lastRate();const stale=!r||dayNum(today())-dayNum(r.date)>=1;
+  return `<section class="ratebox${stale?' stale':''}">
+    <div class="rb-top"><small>نرخ روز یورو (تومان)</small><b>${r?nf(r.rate):'—'}</b><em>${r?'آخرین ثبت: '+rateAge(r):'هنوز ثبت نشده'}</em></div>
+    <div class="rb-in"><input id="hr_v" inputmode="numeric" placeholder="نرخ جدید (اختیاری)" autocomplete="off" oninput="fmtIn(this)" onkeydown="if(event.key==='Enter')saveHomeRate()"><button class="btn pri" onclick="saveHomeRate()">ثبت</button></div>
+    ${stale?`<p class="rb-warn">${r?`نرخ امروز ثبت نشده؛ ارزش و سود/زیان بر اساس نرخ ${rateAge(r)} است.`:'برای محاسبهٔ ارزش و سود/زیان، نرخ روز را وارد کنید.'}</p>`:''}
+  </section>`;
+}
+function rateGuard(v){const r=lastRate();return !(r&&Math.abs(v-r.rate)/r.rate>0.15)||confirm(`نرخ جدید ${nf(v)} با نرخ قبلی ${nf(r.rate)} بیش از ۱۵٪ فرق دارد (شاید یک صفر کم یا زیاد شده). درست است؟`);}
+async function saveHomeRate(){const v=toLn(val('hr_v'));if(!(v>0))return errIn('hr_v','نرخ را وارد کنید');if(!rateGuard(v))return;await commit(()=>addRate(v,today()),'نرخ روز ثبت شد: '+nf(v));}
 // ---------------- Rate / opening / count ----------------
 function openRate(){const r=lastRate();openSheet(`${sheetHead('نرخ روز یورو','نرخ بازار آزاد (مثلاً از اپ «چند»)')}
   ${field('نرخ هر یورو (تومان)',money('r_v',r?r.rate:0))}${field('تاریخ',dateIn('r_d',today()))}<button class="btn pri" onclick="saveRate()">ثبت</button>
   ${ST.rates.length?`<h3 class="sec">نرخ‌های اخیر</h3><div class="list">${ST.rates.slice().sort((a,b)=>cmpD(b.date,a.date)||b.at-a.at).slice(0,8).map(x=>`<div class="row"><div class="rb"><b>${nf(x.rate)}</b><small>${fmtD(x.date)}</small></div></div>`).join('')}</div>`:''}`);}
-async function saveRate(){const d=readDate('r_d');if(!d)return errIn('r_d','تاریخ نامعتبر است');const v=toLn(val('r_v'));if(!(v>0))return errIn('r_v','نرخ را وارد کنید');await commit(()=>addRate(v,d),'نرخ روز ثبت شد');}
+async function saveRate(){const d=readDate('r_d');if(!d)return errIn('r_d','تاریخ نامعتبر است');const v=toLn(val('r_v'));if(!(v>0))return errIn('r_v','نرخ را وارد کنید');if(!rateGuard(v))return;await commit(()=>addRate(v,d),'نرخ روز ثبت شد');}
 function openOpening(){const o=ST.opening||{eur:0,cost:861929153,date:today()};openSheet(`${sheetHead('موجودی اولیهٔ صندوق','یورویی که الان نزد سحر دارید')}
   ${field('تعداد یورو',`<input id="o_eur" inputmode="decimal" value="${o.eur?toFa(o.eur):''}">`)}
   ${field('بهای تمام‌شدهٔ کل (تومان)',money('o_cost',o.cost),'پیش‌فرض: ۸۶۱٬۹۲۹٬۱۵۳ — جمع خرید یورو در صورتحساب تجارت')}
