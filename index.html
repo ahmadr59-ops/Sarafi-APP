@@ -195,7 +195,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 /* صرافی */
 .eye{background:rgba(255,255,255,.14);border:0;border-radius:12px;width:40px;height:34px;font-size:17px;cursor:pointer}
 .tabs .plus{flex:0 0 auto;width:52px;height:52px;margin:-14px 6px 0;border-radius:50%;background:var(--brass,#B08D3E);color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.25)}
-.tabs .plus svg{stroke:#fff;width:26px;height:26px}
+.tabs .plus{justify-content:center;padding:0;gap:0}
+.tabs .plus svg{stroke:#fff;width:26px;height:26px;display:block;margin:0}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 .ratebox{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px;margin:12px 0}
@@ -236,7 +237,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 //   • Guarantee cheques are never payments.
 //   • Partner settlement is on a CASH basis per Jalali year.
 // ============================================================
-const APP_VERSION='v1.3';
+const APP_VERSION='v1.4';
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const MFA=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const MSH=['فرو','ارد','خرد','تیر','مرد','شهر','مهر','آبا','آذر','دی','بهم','اسف'];
@@ -348,6 +349,13 @@ function bridgeTarget(){
   return Math.round(t);
 }
 // ready once real euros are on record: an opening balance OR at least one confirmed deal (history entered deal by deal)
+// the same number, itemised — shown in «صندوق» so the value in «سرمایه» is never a mystery
+function bridgeParts(){
+  const v=vault();const p={base:v.mkt?v.value:v.cost,baseAtCost:!v.mkt,paidInTransit:0,owedByMe:0,owedToMe:0,receivedEarly:0};
+  ST.deals.forEach(d=>{const pd=paidT(d),rem=Math.max(0,remT(d));
+    if(d.kind==='buy'){if(d.eurDone)p.owedByMe+=rem;else p.paidInTransit+=pd;}else{if(d.eurDone)p.owedToMe+=rem;else p.receivedEarly+=pd;}});
+  p.target=Math.round(p.base+p.paidInTransit-p.owedByMe+p.owedToMe-p.receivedEarly);return p;
+}
 const bridgeReady=()=>!!(ST.opening&&(ST.opening.eur>0||ST.deals.some(d=>d.eurDone)));
 function monthSummary(y,m){
   const L=ST.deals.filter(d=>d.date.y===y&&d.date.m===m);
@@ -537,9 +545,22 @@ function vVault(){
     <p class="hero-s">بهای تمام‌شده: <b>${nf(v.cost)}</b> تومان · میانگین هر یورو <b>${nf(v.avg)}</b></p></section>
   <div class="kpis"><div><small>ارزش روز</small><b>${v.mkt?nf(v.value):'—'}</b></div><div><small>سود/زیان ارزش (تحقق‌نیافته)</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':(v.unreal<0?'−':'+')+nf(Math.abs(v.unreal))}</b></div>
    <div><small>سود فروش‌ها (تحقق‌یافته)</small><b>${nf(v.realized)}</b></div><div><small>نرخ روز</small><b>${v.mkt?nf(v.mkt):'—'}</b></div></div>
+  ${bridgeCard()}
   <h3 class="sec">شمارش صندوق</h3>${lc?`<div class="row"><span class="ri ${Math.abs(lc.eur-lc.expected)<0.001?'r-ok':'r-late'}">${svg(Math.abs(lc.eur-lc.expected)<0.001?'ok':'late')}</span><div class="rb"><b>${eu(lc.eur)} در ${fmtD(lc.date)}</b><small>${Math.abs(lc.eur-lc.expected)<0.001?'با دفتر برابر بود':'اختلاف با دفتر: '+eu(lc.eur-lc.expected)}</small></div></div>`:'<p class="dim">هنوز شمارشی ثبت نشده.</p>'}
   <div class="acts"><button class="btn" onclick="openCount()">ثبت شمارش</button><button class="btn" onclick="openRate()">نرخ روز</button></div>
   <h3 class="sec">موجودی اولیه</h3><div class="row"><div class="rb"><b>${o?eu(o.eur)+' · '+nf(o.cost)+' تومان':'ثبت نشده'}</b><small>${o?fmtD(o.date):''}</small></div><div class="ra"><button class="mini" onclick="openOpening()">ویرایش</button></div></div>`;
+}
+function bridgeCard(){
+  if(!bridgeReady())return '';const p=bridgeParts();let pub=null;try{pub=JSON.parse(localStorage.getItem('sarafi_pub')||'null');}catch(e){}
+  const line=(l,v,sign)=>v?`<div style="display:flex;justify-content:space-between;padding:4px 0"><span>${l}</span><b>${sign}${nf(v)}</b></div>`:'';
+  return `<h3 class="sec">ارزش ارسالی به «سرمایه»</h3><div class="note" style="line-height:1.9">
+    ${line(p.baseAtCost?'یوروهای صندوق (به بهای خرید؛ نرخ روز ثبت نشده)':'یوروهای صندوق به نرخ روز',p.base,'')}
+    ${line('تومانِ پرداخت‌شده برای یوروی هنوز نرسیده',p.paidInTransit,'+ ')}
+    ${line('تومانی که هنوز بدهکارم',p.owedByMe,'− ')}
+    ${line('تومانی که هنوز طلبکارم',p.owedToMe,'+ ')}
+    ${line('تومانِ دریافتی برای یوروی هنوز تحویل‌نشده',p.receivedEarly,'− ')}
+    <div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:6px;padding-top:6px"><span>= حساب «ارز (یورو)» در سرمایه</span><b>${nf(p.target)}</b></div>
+    <small class="dim">${!ghOn()?'پشتیبان GitHub فعال نیست؛ چیزی ارسال نمی‌شود.':pub?(pub.target===p.target?'✓ ارسال شد — ':'⏳ در صف ارسال (حدود ۲۰ ثانیه) — آخرین ارسال: ')+new Date(pub.at).toLocaleString('fa-IR'):'هنوز ارسال نشده'}. «سرمایه» این عدد را دفعهٔ بعد که باز شود می‌گیرد.</small></div>`;
 }
 // ---------------- Report ----------------
 function vReport(){
@@ -628,7 +649,7 @@ let pubTimer=null;
 async function publishStatus(){
   if(!ghOn()||!bridgeReady())return false;const v=vault();
   const st={target:bridgeTarget(),eur:v.eur,mkt:v.mkt,value:v.value,cost:v.cost,ready:true,at:Date.now()};
-  for(let i=0;i<3;i++){const {sha}=await ghFileRead('sarafi-status.json');const p=await ghFileWrite('sarafi-status.json',st,'وضعیت صرافی',sha);if(p.ok)return true;if(p.status!==409&&p.status!==422)return false;}
+  for(let i=0;i<3;i++){const {sha}=await ghFileRead('sarafi-status.json');const p=await ghFileWrite('sarafi-status.json',st,'وضعیت صرافی',sha);if(p.ok){try{localStorage.setItem('sarafi_pub',JSON.stringify({at:st.at,target:st.target}));}catch(e){}if(typeof TAB!=='undefined'&&TAB==='vault')render();return true;}if(p.status!==409&&p.status!==422)return false;}
   return false;
 }
 function schedulePublish(){if(!ghOn())return;clearTimeout(pubTimer);pubTimer=setTimeout(()=>publishStatus().catch(()=>{}),20000);}
