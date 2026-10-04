@@ -199,6 +199,8 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 .tabs .plus svg{stroke:#fff;width:26px;height:26px;display:block;margin:0}
 .chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.info{border:0;background:none;color:var(--brass,#B08D3E);font-size:19px;line-height:1;cursor:pointer;padding:2px 6px;vertical-align:middle}
+.info.inv{color:rgba(255,255,255,.85);font-size:21px}
 .ratebox{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:14px;margin:12px 0}
 .ratebox.stale{border-color:#D98E04;background:linear-gradient(0deg,rgba(217,142,4,.07),rgba(217,142,4,.07)),var(--card)}
 .rb-top{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.rb-top small{flex-basis:100%;font-size:12.5px;color:var(--ink2,#5B6478)}
@@ -237,7 +239,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 //   • Guarantee cheques are never payments.
 //   • Partner settlement is on a CASH basis per Jalali year.
 // ============================================================
-const APP_VERSION='v1.4';
+const APP_VERSION='v1.5';
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const MFA=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const MSH=['فرو','ارد','خرد','تیر','مرد','شهر','مهر','آبا','آذر','دی','بهم','اسف'];
@@ -407,8 +409,8 @@ function go(t){TAB=t;render();window.scrollTo(0,0);}
 
 // ---------------- Home ----------------
 function vHome(){
-  if(!ST.opening) return `<section class="empty"><h3>شروع: موجودی صندوق نزد سحر</h3>
-    <p>تعداد یورویی که الان نزد سحر دارید و بهای تمام‌شدهٔ کل آن را وارد کنید. بعداً هم قابل اصلاح است.</p>
+  if(!ST.opening) return `<section class="empty"><h3>شروع: موجودی صندوق</h3>
+    <p>تعداد یورویی که الان در صندوق دارید و بهای تمام‌شدهٔ کل آن را وارد کنید. بعداً هم قابل اصلاح است.</p>
     <button class="btn pri" onclick="openOpening()">ثبت موجودی اولیه</button>
     <button class="btn" onclick="ST.opening={eur:0,cost:0,date:today()};sv().then(render)">از صفر شروع کن</button></section>`;
   const v=vault(),e=exposures(),r=lastRate(),t=today();
@@ -420,7 +422,7 @@ function vHome(){
   e.eurIOwe.forEach(x=>rows.push(row('up',`یورویی که بدهکارم — ${esc(x.d.party||'بدون نام')}`,`${eu(x.amt)}؛ تومان دریافت شده، یورو هنوز تحویل نشده`,`openDealView('${x.d.id}')`,'تحویل')));
   const open=ST.deals.filter(d=>!isDone(d)).sort((a,b)=>cmpD(b.date,a.date));
   return `<section class="hero">
-    <div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">موجودی صندوق نزد سحر</p>
+    <div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">موجودی صندوق</p>
       <button class="eye" onclick="SHOW=!SHOW;render()" aria-label="نمایش یا پنهان کردن">${SHOW?'🙈':'👁'}</button></div>
     <p class="hero-n">${mask(eu(v.eur))}</p>
     <p class="hero-s">ارزش روز: <b>${mask(v.mkt?nf(v.value)+' تومان':'— (نرخ ثبت نشده)')}</b>${r?` · با نرخ ${nf(r.rate)} (${rateAge(r)})`:''}</p>
@@ -527,13 +529,13 @@ function openRate(){const r=lastRate();openSheet(`${sheetHead('نرخ روز ی�
   ${field('نرخ هر یورو (تومان)',money('r_v',r?r.rate:0))}${field('تاریخ',dateIn('r_d',today()))}<button class="btn pri" onclick="saveRate()">ثبت</button>
   ${ST.rates.length?`<h3 class="sec">نرخ‌های اخیر</h3><div class="list">${ST.rates.slice().sort((a,b)=>cmpD(b.date,a.date)||b.at-a.at).slice(0,8).map(x=>`<div class="row"><div class="rb"><b>${nf(x.rate)}</b><small>${fmtD(x.date)}</small></div></div>`).join('')}</div>`:''}`);}
 async function saveRate(){const d=readDate('r_d');if(!d)return errIn('r_d','تاریخ نامعتبر است');const v=toLn(val('r_v'));if(!(v>0))return errIn('r_v','نرخ را وارد کنید');if(!rateGuard(v))return;await commit(()=>addRate(v,d),'نرخ روز ثبت شد');}
-function openOpening(){const o=ST.opening||{eur:0,cost:861929153,date:today()};openSheet(`${sheetHead('موجودی اولیهٔ صندوق','یورویی که الان نزد سحر دارید')}
+function openOpening(){const o=ST.opening||{eur:0,cost:861929153,date:today()};openSheet(`${sheetHead('موجودی اولیهٔ صندوق','یورویی که الان در صندوق دارید')}
   ${field('تعداد یورو',`<input id="o_eur" inputmode="decimal" value="${o.eur?toFa(o.eur):''}">`)}
   ${field('بهای تمام‌شدهٔ کل (تومان)',money('o_cost',o.cost),'پیش‌فرض: ۸۶۱٬۹۲۹٬۱۵۳ — جمع خرید یورو در صورتحساب تجارت')}
   ${field('تاریخ',dateIn('o_d',o.date))}<button class="btn pri" onclick="saveOpening()">ذخیره</button>`);}
 async function saveOpening(){const eur=parseFloat(normDigits(val('o_eur')).replace(/[٫,]/g,'.'))||0;const d=readDate('o_d');if(!d)return errIn('o_d','تاریخ نامعتبر است');
   await commit(()=>{ST.opening={eur,cost:toLn(val('o_cost')),date:d};},'موجودی اولیه ثبت شد');}
-function openCount(){const v=vault();openSheet(`${sheetHead('شمارش صندوق','عددی که سحر گزارش می‌دهد')}
+function openCount(){const v=vault();openSheet(`${sheetHead('شمارش صندوق','تعداد واقعیِ یوروهای داخل صندوق')}
   <p class="note">موجودی طبق دفتر: <b>${eu(v.eur)}</b></p>${field('یورو شمارش‌شده',`<input id="c_eur" inputmode="decimal">`)}${field('تاریخ',dateIn('c_d',today()))}
   <button class="btn pri" onclick="saveCount()">ثبت</button>`);}
 async function saveCount(){const e=parseFloat(normDigits(val('c_eur')).replace(/[٫,]/g,'.'));if(!(e>=0))return errIn('c_eur','عدد را وارد کنید');const d=readDate('c_d');
@@ -541,19 +543,23 @@ async function saveCount(){const e=parseFloat(normDigits(val('c_eur')).replace(/
 // ---------------- Vault ----------------
 function vVault(){
   const v=vault(),o=ST.opening,lc=ST.counts.slice().sort((a,b)=>cmpD(b.date,a.date)||b.at-a.at)[0];
-  return `<section class="hero"><p class="hero-l">صندوق نزد سحر</p><p class="hero-n">${eu(v.eur)}</p>
+  return `<section class="hero"><div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">صندوق</p>${bridgeReady()?`<button class="info inv" onclick="openBridgeInfo()" aria-label="ارزش در «سرمایه»">ⓘ</button>`:''}</div><p class="hero-n">${eu(v.eur)}</p>
     <p class="hero-s">بهای تمام‌شده: <b>${nf(v.cost)}</b> تومان · میانگین هر یورو <b>${nf(v.avg)}</b></p></section>
   <div class="kpis"><div><small>ارزش روز</small><b>${v.mkt?nf(v.value):'—'}</b></div><div><small>سود/زیان ارزش (تحقق‌نیافته)</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':(v.unreal<0?'−':'+')+nf(Math.abs(v.unreal))}</b></div>
    <div><small>سود فروش‌ها (تحقق‌یافته)</small><b>${nf(v.realized)}</b></div><div><small>نرخ روز</small><b>${v.mkt?nf(v.mkt):'—'}</b></div></div>
-  ${bridgeCard()}
-  <h3 class="sec">شمارش صندوق</h3>${lc?`<div class="row"><span class="ri ${Math.abs(lc.eur-lc.expected)<0.001?'r-ok':'r-late'}">${svg(Math.abs(lc.eur-lc.expected)<0.001?'ok':'late')}</span><div class="rb"><b>${eu(lc.eur)} در ${fmtD(lc.date)}</b><small>${Math.abs(lc.eur-lc.expected)<0.001?'با دفتر برابر بود':'اختلاف با دفتر: '+eu(lc.eur-lc.expected)}</small></div></div>`:'<p class="dim">هنوز شمارشی ثبت نشده.</p>'}
+  <h3 class="sec">شمارش صندوق <button class="info" onclick="openCountInfo()" aria-label="شمارش صندوق یعنی چه؟">ⓘ</button></h3>${lc?`<div class="row"><span class="ri ${Math.abs(lc.eur-lc.expected)<0.001?'r-ok':'r-late'}">${svg(Math.abs(lc.eur-lc.expected)<0.001?'ok':'late')}</span><div class="rb"><b>${eu(lc.eur)} در ${fmtD(lc.date)}</b><small>${Math.abs(lc.eur-lc.expected)<0.001?'با دفتر برابر بود':'اختلاف با دفتر: '+eu(lc.eur-lc.expected)}</small></div></div>`:'<p class="dim">هنوز شمارشی ثبت نشده.</p>'}
   <div class="acts"><button class="btn" onclick="openCount()">ثبت شمارش</button><button class="btn" onclick="openRate()">نرخ روز</button></div>
   <h3 class="sec">موجودی اولیه</h3><div class="row"><div class="rb"><b>${o?eu(o.eur)+' · '+nf(o.cost)+' تومان':'ثبت نشده'}</b><small>${o?fmtD(o.date):''}</small></div><div class="ra"><button class="mini" onclick="openOpening()">ویرایش</button></div></div>`;
 }
+function openBridgeInfo(){openSheet(sheetHead('ارزش یورو در «سرمایه»','چرا با «ارزش روز» این اپ فرق دارد')+bridgeCard());}
+function openCountInfo(){openSheet(`${sheetHead('شمارش صندوق یعنی چه؟')}
+  <p class="note" style="line-height:2">هر چند وقت یک بار، یوروهای داخل صندوق <b>واقعاً شمرده</b> می‌شوند و عدد را این‌جا وارد می‌کنید. اپ آن را با <b>موجودی دفتر</b> (معاملات تأییدشده) مقایسه می‌کند.</p>
+  <p class="note" style="line-height:2">✓ اگر برابر بود، دفتر کامل و درست است.<br>⚠️ اگر فرق داشت، یعنی معامله‌ای ثبت نشده، تأیید یورویی جا افتاده، یا شمارش باید تکرار شود.</p>
+  <button class="btn pri" onclick="openCount()">ثبت شمارش</button>`);}
 function bridgeCard(){
   if(!bridgeReady())return '';const p=bridgeParts();let pub=null;try{pub=JSON.parse(localStorage.getItem('sarafi_pub')||'null');}catch(e){}
   const line=(l,v,sign)=>v?`<div style="display:flex;justify-content:space-between;padding:4px 0"><span>${l}</span><b>${sign}${nf(v)}</b></div>`:'';
-  return `<h3 class="sec">ارزش ارسالی به «سرمایه»</h3><div class="note" style="line-height:1.9">
+  return `<div class="note" style="line-height:1.9">
     ${line(p.baseAtCost?'یوروهای صندوق (به بهای خرید؛ نرخ روز ثبت نشده)':'یوروهای صندوق به نرخ روز',p.base,'')}
     ${line('تومانِ پرداخت‌شده برای یوروی هنوز نرسیده',p.paidInTransit,'+ ')}
     ${line('تومانی که هنوز بدهکارم',p.owedByMe,'− ')}
