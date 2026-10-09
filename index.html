@@ -187,7 +187,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 //         • revaluation is never income.
 // All internal months are 0-based.
 // ============================================================
-const APP_VERSION='v2.0';
+const APP_VERSION='v2.1';
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const MFA=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const WD=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
@@ -273,24 +273,30 @@ function lastRate(c){c=c||'EUR';return ST.rates.filter(r=>r.cur===c).sort((a,b)=
 // Chronological replay of ONE currency: balance per place, pooled moving-average cost,
 // realised profit per sale, toman cost per spend.
 function ledger(c,upTo){
-  const L={sahar:0,me:0};let cost=0,realized=0;const dealGain={},spendCost={};
-  ST.openings.filter(o=>o.cur===c).forEach(o=>{L.sahar+=+o.sahar||0;L.me+=+o.me||0;cost+=+o.cost||0;});
+  const L={sahar:0,me:0};let cost=0,realized=0,lastAvg=0;const dealGain={},spendCost={},noStock={};
+  // fallback price for a spend dated before any stock exists: the overall average of what was bought
+  let fA=0,fC=0;ST.openings.filter(o=>o.cur===c).forEach(o=>{fA+=(+o.sahar||0)+(+o.me||0);fC+=+o.cost||0;});
+  ST.deals.filter(d=>d.cur===c&&d.kind==='buy'&&d.done).forEach(d=>{fA+=d.amt;fC+=tom(d);});const fallAvg=fA>0?fC/fA:0;
   const ev=[];
+  // the opening balance exists from its own date on (v2.1), ahead of anything else that day
+  ST.openings.filter(o=>o.cur===c).forEach(o=>ev.push({t:'open',d:o.date||{y:1300,m:0,d:1},at:-1,x:o}));
   ST.deals.filter(d=>d.cur===c&&d.done).forEach(d=>ev.push({t:'deal',d:d.doneDate||d.date,at:d.at||0,x:d}));
   ST.moves.filter(m=>m.cur===c).forEach(m=>ev.push({t:'move',d:m.date,at:m.at||0,x:m}));
   ST.spends.filter(s=>s.cur===c).forEach(s=>ev.push({t:'spend',d:s.date,at:s.at||0,x:s}));
   ev.sort((a,b)=>cmpD(a.d,b.d)||a.at-b.at);
-  for(const e of ev){if(upTo&&cmpD(e.d,upTo)>0)break;const x=e.x,tot=L.sahar+L.me,avg=tot>0?cost/tot:0;
-    if(e.t==='deal'){if(x.kind==='buy'){L[x.loc]+=x.amt;cost+=tom(x);}else{const c0=avg*x.amt;realized+=tom(x)-c0;dealGain[x.id]=Math.round(tom(x)-c0);cost-=c0;L[x.loc]-=x.amt;}}
+  for(const e of ev){if(upTo&&cmpD(e.d,upTo)>0)break;const x=e.x,tot=L.sahar+L.me,avg=tot>0.005?cost/tot:0;if(avg>0)lastAvg=avg;
+    if(e.t==='open'){L.sahar+=+x.sahar||0;L.me+=+x.me||0;cost+=+x.cost||0;}
+    else if(e.t==='deal'){if(x.kind==='buy'){L[x.loc]+=x.amt;cost+=tom(x);}else{const c0=avg*x.amt;realized+=tom(x)-c0;dealGain[x.id]=Math.round(tom(x)-c0);cost-=c0;L[x.loc]-=x.amt;}}
     else if(e.t==='move'){L[x.from]-=x.amt;L[x.to]+=x.amt;}
-    else{const c0=avg*x.amt;spendCost[x.id]=Math.round(c0);cost-=c0;L[x.loc]-=x.amt;}}
+    else{if(!(avg>0)||L[x.loc]<x.amt-0.005)noStock[x.id]=1;   // v2.1: spent more than was recorded at that place/date
+      const p=avg>0?avg:(lastAvg||fallAvg);const c0=p*x.amt;spendCost[x.id]=Math.round(c0);cost-=c0;L[x.loc]-=x.amt;}}
   L.sahar=r2(L.sahar);L.me=r2(L.me);
-  return{L,cost:Math.abs(L.sahar+L.me)<0.005?0:cost,realized,dealGain,spendCost};
+  return{L,cost:Math.abs(L.sahar+L.me)<0.005?0:cost,realized,dealGain,spendCost,noStock,avgNow:(L.sahar+L.me)>0.005?cost/(L.sahar+L.me):(lastAvg||fallAvg)};
 }
 function vault(c){
   c=c||'EUR';const g=ledger(c);const amt=r2(g.L.sahar+g.L.me);const r=lastRate(c),mkt=r?r.rate:0;
   return{cur:c,amt,sahar:g.L.sahar,me:g.L.me,cost:Math.round(g.cost),avg:amt>0?Math.round(g.cost/amt):0,realized:Math.round(g.realized),
-    mkt,value:Math.round(amt*mkt),unreal:mkt?Math.round(amt*mkt-g.cost):null,dealGain:g.dealGain,spendCost:g.spendCost};
+    mkt,value:Math.round(amt*mkt),unreal:mkt?Math.round(amt*mkt-g.cost):null,dealGain:g.dealGain,spendCost:g.spendCost,noStock:g.noStock};
 }
 // What is still open between you and the other side
 function exposures(){
@@ -336,7 +342,7 @@ function monthSummary(y,m,c){
 // ============================================================
 // UI LAYER — صرافی
 // ============================================================
-let TAB='home',SHOW=false,DF='open';
+let TAB='home',SHOW=false,DF='open',FLOWALL=false;
 const $=id=>document.getElementById(id);
 const val=id=>{const e=$(id);return e?e.value:'';};
 const DBN='sarafi',STORE='kv';
@@ -561,13 +567,19 @@ function openSpend(id){const s=id?byId(ST.spends,id):null;const c=s?s.cur:CV();c
   ${field('توضیح',`<input id="s_note" value="${esc(s?s.note:'')}" autocomplete="off">`)}
   ${field('تاریخ',dateIn('s_d',s?s.date:today()))}
   <button class="btn pri" onclick="saveSpend('${id||''}')">ذخیره</button>
-  ${s?`<button class="btn danger" onclick="delSpend('${id}')">حذف</button>`:''}`);spCalc();}
-function spCalc(){const c=segVal('s_cur','EUR'),l=segVal('s_loc','sahar'),v=vault(c),a=toDec(val('s_amt'));
-  $('s_info').innerHTML=`موجودی ${LOC[l]}: <b>${fx(v[l],c)}</b>${a&&v.avg?` · ≈ <b>${nf(a*v.avg)}</b> تومان به میانگین خرید`:''}`;}
+  ${s?`<button class="btn danger" onclick="delSpend('${id}')">حذف</button>`:''}`);window._spId=id||'';
+  ['s_d_d','s_d_m','s_d_y'].forEach(k=>{const e=$(k);if(e){e.addEventListener('input',spCalc);e.addEventListener('change',spCalc);}});spCalc();}
+// v2.1: what was at that place ON the spend date (excluding the spend being edited), and the price it gets
+function spAt(c,loc,d){const id=window._spId||'';const keep=ST.spends;if(id)ST.spends=ST.spends.filter(x=>x.id!==id);
+  try{const g=ledger(c,d);return{bal:g.L[loc],avg:g.avgNow};}finally{ST.spends=keep;}}
+function spCalc(){const c=segVal('s_cur','EUR'),l=segVal('s_loc','sahar'),a=toDec(val('s_amt')),d=readDate('s_d')||today();const x=spAt(c,l,d);
+  const short=a>0&&a>x.bal+0.001;
+  $('s_info').innerHTML=`موجودی ${LOC[l]} در این تاریخ: <b>${fx(x.bal,c)}</b>${a&&x.avg?` · ≈ <b>${nf(a*x.avg)}</b> تومان به میانگین خرید`:''}`
+    +(short?`<br><b style="color:var(--late)">⚠️ در این تاریخ این مقدار ارز ${LOC[l]} ثبت نشده؛ تاریخ خرید/تأیید یا محل را بررسی کنید.</b>`:'');}
 async function saveSpend(id){const c=segVal('s_cur','EUR'),loc=segVal('s_loc','sahar'),a=toDec(val('s_amt')),d=readDate('s_d');
   if(!(a>0))return errIn('s_amt','مبلغ را وارد کنید');if(!d)return errIn('s_d','تاریخ نامعتبر است');
-  const old=id?byId(ST.spends,id):null;const bal=vault(c)[loc]+(old&&old.cur===c&&old.loc===loc?old.amt:0);
-  if(a>bal+0.001&&!confirm(`موجودی ${LOC[loc]} در دفتر ${fx(bal,c)} است (کمتر از مبلغ). ثبت شود؟`))return;
+  const old=id?byId(ST.spends,id):null;window._spId=id||'';const bal=spAt(c,loc,d).bal;
+  if(a>bal+0.001&&!confirm(`در تاریخ ${fmtD(d)} فقط ${fx(bal,c)} ${LOC[loc]} ثبت شده (کمتر از مبلغ).\nتاریخ خرید یا تأیید را بررسی کنید.\n\nبا این حال ثبت شود؟ (معادل تومانی با آخرین میانگین خرید حساب می‌شود)`))return;
   const x={cur:c,loc,amt:a,date:d,cat:val('s_cat'),note:val('s_note')};
   await commit(()=>{if(old)Object.assign(old,{cur:c,loc,amt:a,date:d,cat:x.cat,note:x.note.trim()});else addSpend(x);},'خرج ارزی ثبت شد');}
 async function delSpend(id){if(!confirm('این خرج حذف شود؟ (از «سرمایه» هم حذف می‌شود)'))return;await commit(()=>{ST.spends=ST.spends.filter(s=>s.id!==id);},'خرج حذف شد');}
@@ -595,7 +607,7 @@ function vVault(){
     return `<div class="row"><span class="ri ${okk?'r-ok':'r-late'}">${svg(okk?'ok':'late')}</span><div class="rb"><b>${LOC[l]}: ${fx(k.amt,c)} در ${fmtD(k.date)}</b><small>${okk?'با دفتر برابر بود ✓':'اختلاف با دفتر: '+fx(k.amt-k.expected,c)}</small></div></div>`;};
   const sc=v.spendCost;
   const flow=[...ST.spends.filter(s=>s.cur===c).map(s=>({t:'s',x:s})),...ST.moves.filter(m=>m.cur===c).map(m=>({t:'m',x:m}))]
-    .sort((a,b)=>cmpD(b.x.date,a.x.date)||(b.x.at||0)-(a.x.at||0)).slice(0,12);
+    .sort((a,b)=>cmpD(b.x.date,a.x.date)||(b.x.at||0)-(a.x.at||0));const flowN=flow.length;if(!FLOWALL)flow.splice(12);
   return `${curSeg()}<section class="hero"><div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">صندوق ${CUR[c].n}</p>${bridgeReady()?`<button class="info inv" onclick="openBridgeInfo()" aria-label="ارزش در «سرمایه»">ⓘ</button>`:''}</div><p class="hero-n">${fx(v.amt,c)}</p>
     <p class="hero-s">${LOC.sahar}: <b>${fx(v.sahar,c)}</b> · ${LOC.me}: <b>${fx(v.me,c)}</b></p>
     <p class="hero-s">بهای تمام‌شده: <b>${nf(v.cost)}</b> تومان · میانگین هر ${CUR[c].n} <b>${nf(v.avg)}</b></p></section>
@@ -603,8 +615,9 @@ function vVault(){
    <div><small>سود فروش‌ها (تحقق‌یافته)</small><b>${nf(v.realized)}</b></div><div><small>نرخ روز</small><b>${v.mkt?nf(v.mkt):'—'}</b></div></div>
   <div class="acts"><button class="btn" onclick="openSpend()">💳 خرج ارزی</button><button class="btn" onclick="openMove()">⇄ جابه‌جایی</button></div>
   ${flow.length?`<h3 class="sec">خرج‌ها و جابه‌جایی‌ها</h3><div class="list">${flow.map(f=>f.t==='s'
-    ?`<button class="row tap" onclick="openSpend('${f.x.id}')"><span class="ri r-late">${svg('spend')}</span><div class="rb"><b>خرج ${fx(f.x.amt,c)} · ${esc(f.x.cat)}</b><small>${fmtD(f.x.date)} · ${LOC[f.x.loc]}${f.x.note?' · '+esc(f.x.note):''} · ≈ ${nf(sc[f.x.id]||0)} تومان</small></div></button>`
-    :`<button class="row tap" onclick="openMove('${f.x.id}')"><span class="ri r-up">${svg('move')}</span><div class="rb"><b>جابه‌جایی ${fx(f.x.amt,c)}</b><small>${fmtD(f.x.date)} · ${f.x.from==='sahar'?'از سحر به خودم':'از خودم به سحر'}${f.x.note?' · '+esc(f.x.note):''}</small></div></button>`).join('')}</div>`:''}
+    ?`<button class="row tap" onclick="openSpend('${f.x.id}')"><span class="ri r-late">${svg('spend')}</span><div class="rb"><b>خرج ${fx(f.x.amt,c)} · ${esc(f.x.cat)}</b><small>${fmtD(f.x.date)} · ${LOC[f.x.loc]}${f.x.note?' · '+esc(f.x.note):''} · ≈ ${nf(sc[f.x.id]||0)} تومان${v.noStock[f.x.id]?' · <b style="color:var(--late)">⚠️ موجودی آن تاریخ کافی نبود</b>':''}</small></div></button>`
+    :`<button class="row tap" onclick="openMove('${f.x.id}')"><span class="ri r-up">${svg('move')}</span><div class="rb"><b>جابه‌جایی ${fx(f.x.amt,c)}</b><small>${fmtD(f.x.date)} · ${f.x.from==='sahar'?'از سحر به خودم':'از خودم به سحر'}${f.x.note?' · '+esc(f.x.note):''}</small></div></button>`).join('')}</div>
+    ${flowN>12?`<button class="btn" onclick="FLOWALL=!FLOWALL;render()">${FLOWALL?'نمایش ۱۲ مورد آخر':'نمایش همه ('+toFa(flowN)+')'}</button>`:''}`:''}
   <h3 class="sec">شمارش صندوق <button class="info" onclick="openCountInfo()" aria-label="شمارش صندوق یعنی چه؟">ⓘ</button></h3>${(cRow('sahar')+cRow('me'))?`<div class="list">${cRow('sahar')}${cRow('me')}</div>`:'<p class="dim">هنوز شمارشی ثبت نشده.</p>'}
   <div class="acts"><button class="btn" onclick="openCount()">ثبت شمارش</button><button class="btn" onclick="openRate()">نرخ روز</button></div>
   <h3 class="sec">موجودی اولیه</h3><div class="list"><div class="row"><div class="rb"><b>${o?`${LOC.sahar} ${fx(o.sahar,c)} · ${LOC.me} ${fx(o.me,c)}`:'ثبت نشده'}</b><small>${o?nf(o.cost)+' تومان · '+fmtD(o.date):''}</small></div><div class="ra"><button class="mini" onclick="openOpening()">ویرایش</button></div></div></div>`;
