@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="صرافی">
-<title>صرافی — دفتر یورو</title>
+<title>صرافی — دفتر ارز</title>
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-32.png">
 <link rel="apple-touch-icon" href="icon-180.png">
@@ -49,7 +49,6 @@ main{max-width:560px;margin:0 auto;padding:0 16px}
 .sec{font-size:13.5px;font-weight:800;color:var(--t2);margin:22px 2px 10px}
 .sec.m0{margin:0}
 .dim{color:var(--t3);font-size:12.5px}
-.calm{color:var(--t3);font-size:13.5px;padding:14px 4px}
 .note{font-size:12.5px;color:var(--t3);margin:8px 2px 0;line-height:1.8}
 
 /* hero: the ledger balance */
@@ -58,67 +57,32 @@ main{max-width:560px;margin:0 auto;padding:0 16px}
 .hero-n{font-size:38px;font-weight:800;letter-spacing:-.5px;line-height:1.25;font-variant-numeric:tabular-nums}
 .hero-n small{font-size:14px;font-weight:600;color:var(--t3);margin-right:6px}
 .hero-n.is-late{color:var(--late)}
-.meter{height:8px;border-radius:5px;background:var(--line);overflow:hidden;margin:14px 0 8px}
-.meter span{display:block;height:100%;background:var(--ok);border-radius:5px;transition:width .5s}
 .hero-s{font-size:12.5px;color:var(--t2)}.hero-s b{color:var(--t1)}
 
 /* rows */
 .list{background:var(--card);border:1px solid var(--line);border-radius:var(--r1);overflow:hidden}
 .row{display:flex;align-items:center;gap:11px;padding:12px 14px;border-bottom:1px solid var(--line);width:100%;background:none;border-left:0;border-right:0;border-top:0;text-align:right}
-.row:last-child{border-bottom:0}.row.tap{cursor:pointer}.row.col{flex-direction:column;align-items:stretch}
-.rtop{display:flex;align-items:flex-start;gap:11px}
+.row:last-child{border-bottom:0}.row.tap{cursor:pointer}
 .rb{flex:1;min-width:0}.rb b{display:block;font-size:14px;font-weight:700}.rb small{display:block;font-size:12px;color:var(--t2);margin-top:2px}
 .ri{width:38px;height:38px;border-radius:11px;display:grid;place-items:center;flex-shrink:0}
 .ic{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
-.r-late{background:var(--late-l);color:var(--late)}.r-up{background:var(--warn-l);color:var(--warn)}
-.r-ren{background:var(--ok-l);color:var(--ok)}.r-chq{background:var(--brass-l);color:var(--brass)}.r-ok{background:var(--ok-l);color:var(--ok)}
+.r-late{background:var(--late-l);color:var(--late)}.r-up{background:var(--warn-l);color:var(--warn)}.r-ok{background:var(--ok-l);color:var(--ok)}
 .ra{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:center}
-.row.col .ra{margin-top:10px}
 .mini{padding:6px 12px;border-radius:10px;border:1px solid var(--line);background:var(--card);font-size:12px;font-weight:700;cursor:pointer;color:var(--t2)}
 .mini.ok{background:var(--ok-l);border-color:transparent;color:var(--ok)}.mini.bad{background:var(--late-l);border-color:transparent;color:var(--late)}
-.dis{width:30px;height:30px;border-radius:9px;border:0;background:transparent;color:var(--t3);cursor:pointer;font-size:14px}
 .bal{text-align:left;font-weight:800;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .bal small{display:block;font-size:12px;font-weight:600;color:var(--t3)}
-.is-late{color:var(--late)}.is-adv{color:var(--ok)}
-.owe{color:var(--late);font-size:12.5px;font-weight:700;margin-top:10px}.adv{color:var(--ok);font-size:12.5px;font-weight:700;margin-top:10px}
-.nudge{display:block;width:100%;margin-top:18px;padding:12px;border-radius:var(--r2);border:1px dashed var(--brass);background:var(--brass-l);color:var(--t1);font-size:12.5px;font-weight:600;cursor:pointer}
-
-/* properties */
-.bar{display:flex;justify-content:space-between;align-items:center;margin:18px 0 12px;gap:10px}
-.pc{background:var(--card);border:1px solid var(--line);border-radius:var(--r1);padding:15px;margin-bottom:12px;cursor:pointer}
-.pc header{display:flex;align-items:center;gap:11px}
+.is-late{color:var(--late)}
+.owe{color:var(--late);font-size:12.5px;font-weight:700;margin-top:10px}
 .pt{width:42px;height:42px;border-radius:12px;background:var(--ink);color:#F0C75E;display:grid;place-items:center;flex-shrink:0}
 html[data-theme="dark"] .pt{background:#22324F}
-.pn{flex:1;min-width:0}.pn h4{font-size:15px;font-weight:800}.pn p{font-size:12.5px;color:var(--t2)}
-.pr{text-align:left}.pr b{display:block;font-size:15px;font-weight:800;font-variant-numeric:tabular-nums}.pr small{font-size:12px;color:var(--t3)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
-.chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:8px;background:var(--line);color:var(--t2);vertical-align:middle}
-.chip.brass{background:var(--brass-l);color:var(--brass)}.chip.ok{background:var(--ok-l);color:var(--ok)}.chip.bad{background:var(--late-l);color:var(--late)}.chip.warn{background:var(--warn-l);color:var(--warn)}
-.st-paid{background:var(--ok-l);color:var(--ok)}.st-partial{background:var(--warn-l);color:var(--warn)}.st-late{background:var(--late-l);color:var(--late)}.st-upcoming{background:var(--line);color:var(--t2)}
-/* signature: month stamp strip */
-.strip{display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:13px}
-.strip i{font-style:normal;height:30px;border-radius:7px;display:grid;place-items:center;font-size:9.5px;font-weight:700;color:var(--t3);background:transparent;border:1px dashed var(--line)}
-.strip .c-paid{background:var(--ok);border:0;color:#fff}
-.strip .c-partial{background:linear-gradient(0deg,var(--warn) 50%,var(--warn-l) 50%);border:0;color:var(--t1)}
-.strip .c-late{background:var(--late-l);border:1.5px solid var(--late);color:var(--late)}
-.strip .c-upcoming{border:1px solid var(--line);color:var(--t2);background:var(--paper)}
-.strip .c-none{opacity:.45}
-.strip .now{box-shadow:0 0 0 2px var(--brass)}
-.legend{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:12px;color:var(--t2);margin:0 2px 12px;align-items:center}
-.legend i{display:inline-block;width:14px;height:10px;border-radius:3px;margin-left:4px;vertical-align:middle}
-.legend .c-paid{background:var(--ok)}.legend .c-partial{background:var(--warn)}.legend .c-late{background:var(--late-l);border:1.5px solid var(--late)}.legend .c-upcoming{border:1px solid var(--t3)}
-
-/* reports */
-.yr{display:flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px}
-.yr button{width:34px;height:32px;border:0;background:none;font-size:20px;cursor:pointer;color:var(--t2)}
-.yr b{min-width:52px;text-align:center}
+.chip{display:inline-block;font-size:12px;font-weight:700;padding:2px 9px;border-radius:8px;background:var(--line);color:var(--t2);vertical-align:middle}.chip.ok{background:var(--ok-l);color:var(--ok)}.chip.bad{background:var(--late-l);color:var(--late)}
 .kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
-.kpis div,.aging div{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:12px 13px}
-.kpis small,.aging small{display:block;font-size:12.5px;color:var(--t2)}
-.kpis b,.aging b{font-size:clamp(14px,4.4vw,18px);font-weight:800;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.aging{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
-.kpis div,.aging div{min-width:0}
-.aging .is-late b{color:var(--late)}
+.kpis div{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:12px 13px}
+.kpis small{display:block;font-size:12.5px;color:var(--t2)}
+.kpis b{font-size:clamp(14px,4.4vw,18px);font-weight:800;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.kpis div{min-width:0}
 .tbl{overflow-x:auto;background:var(--card);border:1px solid var(--line);border-radius:var(--r1)}
 table{width:100%;border-collapse:collapse;font-size:12.5px;font-variant-numeric:tabular-nums}
 th{font-size:12.5px;color:var(--t2);font-weight:700;text-align:right;padding:10px 10px;border-bottom:1px solid var(--line);white-space:nowrap}
@@ -130,16 +94,13 @@ tr:last-child td{border-bottom:0}td small{display:block;font-size:12px;color:var
   background:var(--card);font-size:14px;font-weight:700;cursor:pointer;text-decoration:none;color:var(--t1);position:relative}
 .btn.pri{background:var(--pri);color:var(--pri-t);border-color:transparent}
 .btn.danger{color:var(--late);border-color:var(--late-l)}
-.btn.sm{width:auto;margin:0;padding:8px 14px;font-size:13px}
 .btn.file input{position:absolute;inset:0;opacity:0;cursor:pointer}
 .acts{display:grid;grid-template-columns:1fr 1fr;gap:0 8px}
 .acts .btn{margin-top:8px}
 .seg{display:inline-flex;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:3px;gap:2px;flex-wrap:wrap}
 .seg button{border:0;background:none;padding:6px 14px;border-radius:9px;font-size:13px;font-weight:700;color:var(--t2);cursor:pointer}
+.seg.cur{margin-top:16px}
 .seg button.on{background:var(--pri);color:var(--pri-t)}
-.seg.yrs{margin:14px 0 10px}
-
-.cdot{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.25)}.cdot.on{background:#43C084;box-shadow:0 0 0 3px rgba(67,192,132,.25)}
 /* sheet */
 .ov{position:fixed;inset:0;background:rgba(8,14,26,.5);display:none;align-items:flex-end;justify-content:center;z-index:50}
 .ov.on{display:flex}
@@ -156,13 +117,7 @@ tr:last-child td{border-bottom:0}td small{display:block;font-size:12px;color:var
 .err{border-color:var(--late)!important;background:var(--late-l)!important}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:0 10px}
 .dt{display:grid;grid-template-columns:.7fr 1.5fr 1fr;gap:6px}
-.chk{display:flex;align-items:center;gap:8px;font-size:13.5px;margin:4px 0 12px;cursor:pointer}
-.chk input{width:18px;height:18px;accent-color:var(--brass)}
 .divider{height:1px;background:var(--line);margin:18px 0 14px}
-.ctr{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:12px 14px;margin-top:10px;font-size:13px;line-height:1.9}
-.stbal{background:var(--card);border:1px solid var(--line);border-radius:var(--r1);padding:14px 16px;margin-bottom:4px}
-.stbal small{font-size:12px;color:var(--t2);display:block}.stbal b{font-size:30px;font-weight:800;font-variant-numeric:tabular-nums}
-.stbal.is-late b{color:var(--late)}.stbal.is-adv b{color:var(--ok)}
 .empty{text-align:center;padding:48px 10px}.empty h3{font-size:18px;margin-bottom:6px}.empty p{color:var(--t2);font-size:13.5px;margin-bottom:14px}
 
 /* tabs */
@@ -182,16 +137,9 @@ html[data-theme="dark"] #toast{background:#2A3A5C}
 /* v1.8 layout guards */
 html,body{overflow-x:hidden;max-width:100%}
 input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{font-size:16px}
-[style*="grid-template-columns"]>*{min-width:0}
-.strip{display:flex;gap:4px;margin-top:8px;width:100%}.cell{flex:1;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--line,#e4e7ee)}
-.cell i{font-style:normal;font-size:12px;color:#fff;font-weight:700}.cell.paid{background:#1A8A4A}.cell.partial{background:#D98E04}.cell.late{background:#C8323C}.cell.upcoming{background:#9AA3B5}.cell.none{background:transparent;border:1px dashed #9AA3B5}.cell.none i{color:#9AA3B5}
+[style*="grid-template-columns"]>*{min-width:0}.cell{flex:1;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:var(--line,#e4e7ee)}
+.cell i{font-style:normal;font-size:12px;color:#fff;font-weight:700}.cell.paid{background:#1A8A4A}.cell.late{background:#C8323C}.cell.none{background:transparent;border:1px dashed #9AA3B5}.cell.none i{color:#9AA3B5}
 .cell.now{outline:2px solid var(--brass,#B08D3E);outline-offset:1px}
-.cell.prepaid{background:#9AA3B5}.st-prepaid{background:#E8EBF2;color:#5B6478}
-.mcell{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;gap:4px}.mcell .cell{width:100%;height:22px;flex:none}
-.mcell em{font-style:normal;font-size:12px;font-weight:600;color:var(--ink2,#5B6478);white-space:nowrap;letter-spacing:-.3px}
-.ygrid{display:grid;grid-template-columns:repeat(6,1fr);gap:8px 4px;margin-top:10px;width:100%}
-.mcell.cur em{font-weight:900;color:var(--ink,#1C2B45);text-decoration:underline;text-underline-offset:3px}
-.legend{display:flex;gap:6px;align-items:center;flex-wrap:wrap}.legend .cell{flex:none;width:14px;height:14px;display:inline-block;margin-inline-start:6px}
 /* صرافی */
 .eye{background:rgba(255,255,255,.14);border:0;border-radius:12px;width:40px;height:34px;font-size:17px;cursor:pointer}
 .tabs .plus{flex:0 0 auto;width:52px;height:52px;margin:-14px 6px 0;border-radius:50%;background:var(--brass,#B08D3E);color:#fff;box-shadow:0 6px 16px rgba(0,0,0,.25)}
@@ -213,7 +161,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 <body>
 <header class="hdr">
   <img src="icon-192.png" alt="">
-  <div><h1>صرافی</h1><p id="hdate">دفتر یورو</p></div>
+  <div><h1>صرافی</h1><p id="hdate">دفتر ارز</p></div>
   <div class="sp"></div>
   <button class="ibtn" onclick="openSettings()" aria-label="تنظیمات"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.7 1.7 0 00-1.8-.3 1.7 1.7 0 00-1 1.5V21a2 2 0 11-4 0v-.1a1.7 1.7 0 00-1.1-1.5 1.7 1.7 0 00-1.8.3l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.7 1.7 0 00.3-1.8 1.7 1.7 0 00-1.5-1H3a2 2 0 110-4h.1a1.7 1.7 0 001.5-1.1 1.7 1.7 0 00-.3-1.8l-.1-.1a2 2 0 112.8-2.8l.1.1a1.7 1.7 0 001.8.3H9a1.7 1.7 0 001-1.5V3a2 2 0 114 0v.1a1.7 1.7 0 001 1.5 1.7 1.7 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.7 1.7 0 00-.3 1.8V9a1.7 1.7 0 001.5 1H21a2 2 0 110 4h-.1a1.7 1.7 0 00-1.5 1z"/></svg></button>
 </header>
@@ -230,27 +178,26 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 <script>
 'use strict';
 // ============================================================
-// «املاک» — rent receivables ledger. CORE (DOM-free).
-// Conventions (all internal months are 0-based):
-//   • First rent is due ONE month after contract start, on the start day.
-//   • Each rent month is a CHARGE (debit); payments are CREDITS allocated
-//     FIFO to the oldest charge. Balance = Σ due charges − Σ payments.
-//   • A rent cheque becomes a payment on its CLEARING date (prudence).
-//   • Guarantee cheques are never payments.
-//   • Partner settlement is on a CASH basis per Jalali year.
+// «صرافی» v2 — personal foreign-currency ledger (euro by default, dollar optional).
+// Rules:  • the currency side counts only once confirmed (done);
+//         • cost basis = ONE moving average per currency, shared by both places
+//           (نزد سحر / نزد خودم — where the cash sits is custody, not price);
+//         • a sale realises (its toman − average cost × amount); a spend costs
+//           (amount × average cost) and is reported to «سرمایه» as an expense;
+//         • revaluation is never income.
+// All internal months are 0-based.
 // ============================================================
-const APP_VERSION='v1.6';
+const APP_VERSION='v2.0';
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const MFA=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
-const MSH=['فرو','ارد','خرد','تیر','مرد','شهر','مهر','آبا','آذر','دی','بهم','اسف'];
 const WD=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
-const DEFAULT_SMS='{نام} گرامی، سلام. اجاره {ماه} {ملک} به مبلغ {مبلغ} تومان در تاریخ {سررسید} سررسید {وضعیت}. لطفاً نسبت به پرداخت اقدام فرمایید. با سپاس';
 
 function toFa(s){return String(s).replace(/[0-9]/g,d=>FA[d]);}
 function esc(s){return String(s===undefined||s===null?'':s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function nf(n){const r=Math.round(n||0);const w=Math.abs(r).toString().replace(/\B(?=(\d{3})+(?!\d))/g,'٬');return toFa((r<0?'-':'')+w);}
 function normDigits(s){return String(s==null?'':s).replace(/[۰-۹]/g,d=>'۰۱۲۳۴۵۶۷۸۹'.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d));}
 function toLn(s){return parseFloat(normDigits(s).replace(/[,،٬\s]/g,''))||0;}
+const toDec=s=>parseFloat(normDigits(s).replace(/[٬,\s]/g,'').replace(/[٫]/g,'.'))||0;
 function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8);}
 
 // ---------------- Jalali calendar ----------------
@@ -278,8 +225,6 @@ function jToG(jy,jm0,jd){
 }
 function jMonthLen(y,m0){if(m0<6)return 31;if(m0<11)return 30;return jToG(y,11,30)?30:29;}
 function dayNum(d){const g=jToG(d.y,d.m,Math.min(d.d,jMonthLen(d.y,d.m)));return Math.round(g.getTime()/864e5);}
-function fromDayNum(n){const g=new Date(n*864e5);const j=gToJ(g.getUTCFullYear(),g.getUTCMonth()+1,g.getUTCDate());return{y:j.y,m:j.m-1,d:j.d};}
-function addDays(d,n){return fromDayNum(dayNum(d)+n);}
 function cmpD(a,b){return (a.y-b.y)||(a.m-b.m)||(a.d-b.d);}
 let NOW_OVERRIDE=null; // tests only
 function today(){
@@ -287,82 +232,105 @@ function today(){
   const n=new Date();const j=gToJ(n.getFullYear(),n.getMonth()+1,n.getDate());
   return{y:j.y,m:j.m-1,d:j.d,wd:WD[n.getDay()]};
 }
-function tIdx(d){d=d||today();return d.y*12+d.m;}
 function fmtD(d){return d?`${toFa(d.d)} ${MFA[d.m]} ${toFa(d.y)}`:'—';}
-function fmtM(idx){return `${MFA[idx%12]} ${toFa(Math.floor(idx/12))}`;}
 
 // ---------------- State ----------------
-
-// ============================================================
-// صرافی — personal euro ledger (euros held by Sahar, toman settled in Iran)
-// Rules:  • the euro side counts only once confirmed (eurDone);
-//         • cost basis = moving average (opening + confirmed buys, at the agreed toman);
-//         • a sell realises (its toman − average cost × €); revaluation is never income.
-// ============================================================
-function def(){return{v:1,settings:{theme:'auto',lastBackup:0},opening:null,rates:[],deals:[],counts:[],bridge:[],bridgeDone:{}};}
+const CUR={EUR:{n:'یورو',s:'€'},USD:{n:'دلار',s:'$'}};
+const LOC={sahar:'نزد سحر',me:'نزد خودم'};
+const SPEND_CATS=['سفر','خرید','خوراک','هدیه','درمان','آموزش','سایر'];
+function def(){return{v:2,settings:{theme:'auto',lastBackup:0,usd:false,cur:'EUR',loc:{}},started:false,openings:[],rates:[],deals:[],moves:[],spends:[],counts:[],bridge:[],bridgeDone:{}};}
 let ST=def();
+// v1 (euro only) → v2. Everything that existed was euros held by Sahar, so nothing changes in value.
+function migrateV1(s){
+  if(s.opening){s.openings=[{cur:'EUR',sahar:+s.opening.eur||0,me:0,cost:+s.opening.cost||0,date:s.opening.date}];s.started=true;}
+  (s.deals||[]).forEach(d=>{if(d.amt==null)d.amt=+d.eur||0;d.cur=d.cur||'EUR';d.loc=d.loc||'sahar';
+    if(d.done==null)d.done=!!d.eurDone;if(d.doneDate===undefined)d.doneDate=d.eurDate||null;delete d.eur;delete d.eurDone;delete d.eurDate;});
+  (s.rates||[]).forEach(r=>{r.cur=r.cur||'EUR';});
+  (s.counts||[]).forEach(c=>{if(c.amt==null)c.amt=+c.eur||0;c.cur=c.cur||'EUR';c.loc=c.loc||'sahar';delete c.eur;});
+  delete s.opening;s.v=2;return s;
+}
 function normalize(s){
-  const o=Object.assign(def(),s||{});o.settings=Object.assign(def().settings,o.settings||{});
-  ['rates','deals','counts','bridge'].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[];});if(!o.bridgeDone||typeof o.bridgeDone!=='object')o.bridgeDone={};
-  o.deals.forEach(d=>{if(!Array.isArray(d.pays))d.pays=[];});
+  s=s||{};if(!(s.v>=2))migrateV1(s);
+  const o=Object.assign(def(),s);o.settings=Object.assign(def().settings,s.settings||{});
+  if(!o.settings.loc||typeof o.settings.loc!=='object')o.settings.loc={};
+  ['openings','rates','deals','moves','spends','counts','bridge'].forEach(k=>{if(!Array.isArray(o[k]))o[k]=[];});
+  if(!o.bridgeDone||typeof o.bridgeDone!=='object')o.bridgeDone={};
+  o.deals.forEach(d=>{if(!Array.isArray(d.pays))d.pays=[];if(!d.cur)d.cur='EUR';if(!d.loc)d.loc='sahar';});
+  o.rates.forEach(r=>{if(!r.cur)r.cur='EUR';});
+  if(!o.started&&o.openings.length)o.started=true;
   return o;
 }
 const byId=(arr,id)=>arr.find(x=>x.id===id);
-const tom=d=>Math.round((d.eur||0)*(d.rate||0));
+const tom=d=>Math.round((d.amt||0)*(d.rate||0));
 const paidT=d=>d.pays.reduce((s,p)=>s+(p.amount||0),0);
 const remT=d=>tom(d)-paidT(d);
-function lastRate(){return ST.rates.slice().sort((a,b)=>cmpD(b.date,a.date)||(b.at||0)-(a.at||0))[0]||null;}
-function vault(){
-  let eur=0,cost=0,realized=0;
-  if(ST.opening){eur=ST.opening.eur||0;cost=ST.opening.cost||0;}
-  ST.deals.filter(d=>d.eurDone).sort((a,b)=>cmpD(a.eurDate||a.date,b.eurDate||b.date)||(a.at||0)-(b.at||0)).forEach(d=>{
-    if(d.kind==='buy'){eur+=d.eur;cost+=tom(d);}
-    else{const avg=eur>0?cost/eur:0;const c=avg*d.eur;realized+=tom(d)-c;cost-=c;eur-=d.eur;}
-  });
-  const r=lastRate(),mkt=r?r.rate:0,avg=eur>0?cost/eur:0;
-  return{eur,cost:Math.round(cost),avg:Math.round(avg),realized:Math.round(realized),mkt,value:Math.round(eur*mkt),unreal:mkt?Math.round(eur*mkt-cost):null};
+const r2=n=>Math.round(n*100)/100;
+// dollar shows up when it is switched on — or as soon as any dollar record exists
+const multi=()=>!!ST.settings.usd||ST.deals.some(d=>d.cur==='USD')||ST.openings.some(o=>o.cur==='USD')||ST.spends.some(s=>s.cur==='USD')||ST.moves.some(m=>m.cur==='USD');
+const curs=()=>multi()?['EUR','USD']:['EUR'];
+const CV=()=>multi()&&ST.settings.cur==='USD'?'USD':'EUR';
+function lastRate(c){c=c||'EUR';return ST.rates.filter(r=>r.cur===c).sort((a,b)=>cmpD(b.date,a.date)||(b.at||0)-(a.at||0))[0]||null;}
+// Chronological replay of ONE currency: balance per place, pooled moving-average cost,
+// realised profit per sale, toman cost per spend.
+function ledger(c,upTo){
+  const L={sahar:0,me:0};let cost=0,realized=0;const dealGain={},spendCost={};
+  ST.openings.filter(o=>o.cur===c).forEach(o=>{L.sahar+=+o.sahar||0;L.me+=+o.me||0;cost+=+o.cost||0;});
+  const ev=[];
+  ST.deals.filter(d=>d.cur===c&&d.done).forEach(d=>ev.push({t:'deal',d:d.doneDate||d.date,at:d.at||0,x:d}));
+  ST.moves.filter(m=>m.cur===c).forEach(m=>ev.push({t:'move',d:m.date,at:m.at||0,x:m}));
+  ST.spends.filter(s=>s.cur===c).forEach(s=>ev.push({t:'spend',d:s.date,at:s.at||0,x:s}));
+  ev.sort((a,b)=>cmpD(a.d,b.d)||a.at-b.at);
+  for(const e of ev){if(upTo&&cmpD(e.d,upTo)>0)break;const x=e.x,tot=L.sahar+L.me,avg=tot>0?cost/tot:0;
+    if(e.t==='deal'){if(x.kind==='buy'){L[x.loc]+=x.amt;cost+=tom(x);}else{const c0=avg*x.amt;realized+=tom(x)-c0;dealGain[x.id]=Math.round(tom(x)-c0);cost-=c0;L[x.loc]-=x.amt;}}
+    else if(e.t==='move'){L[x.from]-=x.amt;L[x.to]+=x.amt;}
+    else{const c0=avg*x.amt;spendCost[x.id]=Math.round(c0);cost-=c0;L[x.loc]-=x.amt;}}
+  L.sahar=r2(L.sahar);L.me=r2(L.me);
+  return{L,cost:Math.abs(L.sahar+L.me)<0.005?0:cost,realized,dealGain,spendCost};
+}
+function vault(c){
+  c=c||'EUR';const g=ledger(c);const amt=r2(g.L.sahar+g.L.me);const r=lastRate(c),mkt=r?r.rate:0;
+  return{cur:c,amt,sahar:g.L.sahar,me:g.L.me,cost:Math.round(g.cost),avg:amt>0?Math.round(g.cost/amt):0,realized:Math.round(g.realized),
+    mkt,value:Math.round(amt*mkt),unreal:mkt?Math.round(amt*mkt-g.cost):null,dealGain:g.dealGain,spendCost:g.spendCost};
 }
 // What is still open between you and the other side
 function exposures(){
-  const o={iOwe:[],owedMe:[],eurOwedMe:[],eurIOwe:[]};
+  const o={iOwe:[],owedMe:[],fxOwedMe:[],fxIOwe:[]};
   ST.deals.forEach(d=>{const rem=remT(d),pd=paidT(d);
-    if(d.kind==='buy'){if(d.eurDone&&rem>0)o.iOwe.push({d,amt:rem});if(!d.eurDone&&pd>0)o.eurOwedMe.push({d,amt:d.eur});}
-    else{if(d.eurDone&&rem>0)o.owedMe.push({d,amt:rem});if(!d.eurDone&&pd>0)o.eurIOwe.push({d,amt:d.eur});}});
+    if(d.kind==='buy'){if(d.done&&rem>0)o.iOwe.push({d,amt:rem});if(!d.done&&pd>0)o.fxOwedMe.push({d,amt:d.amt});}
+    else{if(d.done&&rem>0)o.owedMe.push({d,amt:rem});if(!d.done&&pd>0)o.fxIOwe.push({d,amt:d.amt});}});
   return o;
 }
-const isDone=d=>d.eurDone&&remT(d)<=0;
+const isDone=d=>d.done&&remT(d)<=0;
 function addDeal(x){
-  const eur=+x.eur,rate=+x.rate;if(!(eur>0))throw new Error('مقدار یورو را وارد کنید');if(!(rate>0))throw new Error('نرخ را وارد کنید');
-  const d={id:uid(),kind:x.kind==='sell'?'sell':'buy',date:x.date,party:(x.party||'').trim(),eur,rate,mkt:+x.mkt||0,note:(x.note||'').trim(),eurDone:false,eurDate:null,pays:[],at:Date.now()};
+  const amt=+x.amt,rate=+x.rate;if(!(amt>0))throw new Error('مقدار ارز را وارد کنید');if(!(rate>0))throw new Error('نرخ را وارد کنید');
+  const d={id:uid(),kind:x.kind==='sell'?'sell':'buy',cur:x.cur==='USD'?'USD':'EUR',loc:x.loc==='me'?'me':'sahar',date:x.date,party:(x.party||'').trim(),amt,rate,mkt:+x.mkt||0,note:(x.note||'').trim(),done:false,doneDate:null,pays:[],at:Date.now()};
   ST.deals.push(d);return d;
 }
 function addPay(dealId,p){const d=byId(ST.deals,dealId);if(!d)throw new Error('معامله پیدا نشد');const a=+p.amount;if(!(a>0))throw new Error('مبلغ نامعتبر است');
-  if(d.pays.length>=3&&!p.force)throw new Error('حداکثر سه ردیف پرداخت برای هر معامله');
   const r={id:uid(),date:p.date,amount:a,ref:(p.ref||'').trim()};d.pays.push(r);return r;}
-function setEurDone(dealId,done,date){const d=byId(ST.deals,dealId);d.eurDone=!!done;d.eurDate=done?(date||today()):null;}
-function addRate(rate,date){const r=+rate;if(!(r>0))throw new Error('نرخ نامعتبر است');ST.rates.push({id:uid(),date:date||today(),rate:r,at:Date.now()});}
-function addCount(eur,date,note){const v=vault();const c={id:uid(),date:date||today(),eur:+eur,expected:v.eur,note:note||'',at:Date.now()};ST.counts.push(c);return c;}
-// Net euro position in toman — what «سرمایه»'s «ارز (یورو)» account should hold, given that Sarmaye
-// moves tomans when they are paid while the safe changes only when Sahar confirms.
-function bridgeTarget(){
-  const v=vault();let t=v.mkt?v.value:v.cost;
-  ST.deals.forEach(d=>{const pd=paidT(d),rem=Math.max(0,remT(d));
-    if(d.kind==='buy'){if(d.eurDone)t-=rem;else t+=pd;}else{if(d.eurDone)t+=rem;else t-=pd;}});
-  return Math.round(t);
-}
-// ready once real euros are on record: an opening balance OR at least one confirmed deal (history entered deal by deal)
-// the same number, itemised — shown in «صندوق» so the value in «سرمایه» is never a mystery
+function setDone(dealId,done,date){const d=byId(ST.deals,dealId);d.done=!!done;d.doneDate=done?(date||today()):null;}
+function addRate(rate,date,c){const r=+rate;if(!(r>0))throw new Error('نرخ نامعتبر است');ST.rates.push({id:uid(),cur:c||'EUR',date:date||today(),rate:r,at:Date.now()});}
+function addCount(amt,date,c,loc){const g=ledger(c,date);const k={id:uid(),cur:c,loc,date:date||today(),amt:+amt,expected:g.L[loc],at:Date.now()};ST.counts.push(k);return k;}
+function addMove(x){const a=+x.amt;if(!(a>0))throw new Error('مقدار را وارد کنید');const m={id:uid(),cur:x.cur,amt:a,from:x.from,to:x.from==='me'?'sahar':'me',date:x.date,note:(x.note||'').trim(),at:Date.now()};ST.moves.push(m);return m;}
+function addSpend(x){const a=+x.amt;if(!(a>0))throw new Error('مبلغ را وارد کنید');const s={id:uid(),cur:x.cur,amt:a,loc:x.loc==='me'?'me':'sahar',date:x.date,cat:x.cat||'سایر',note:(x.note||'').trim(),at:Date.now()};ST.spends.push(s);return s;}
+// Net currency position in toman — what «سرمایه»'s «ارز» account should hold, given that Sarmaye
+// moves tomans when they are paid while the safe changes only when the currency side is confirmed.
+// The same number, itemised, is shown in «صندوق» so the value in «سرمایه» is never a mystery.
 function bridgeParts(){
-  const v=vault();const p={base:v.mkt?v.value:v.cost,baseAtCost:!v.mkt,paidInTransit:0,owedByMe:0,owedToMe:0,receivedEarly:0};
+  const p={bases:[],paidInTransit:0,owedByMe:0,owedToMe:0,receivedEarly:0};let base=0;
+  ['EUR','USD'].forEach(c=>{const v=vault(c);if(!v.amt&&!v.cost)return;const b=v.mkt?v.value:v.cost;base+=b;p.bases.push({c,amt:v.amt,v:b,atCost:!v.mkt});});
   ST.deals.forEach(d=>{const pd=paidT(d),rem=Math.max(0,remT(d));
-    if(d.kind==='buy'){if(d.eurDone)p.owedByMe+=rem;else p.paidInTransit+=pd;}else{if(d.eurDone)p.owedToMe+=rem;else p.receivedEarly+=pd;}});
-  p.target=Math.round(p.base+p.paidInTransit-p.owedByMe+p.owedToMe-p.receivedEarly);return p;
+    if(d.kind==='buy'){if(d.done)p.owedByMe+=rem;else p.paidInTransit+=pd;}else{if(d.done)p.owedToMe+=rem;else p.receivedEarly+=pd;}});
+  p.target=Math.round(base+p.paidInTransit-p.owedByMe+p.owedToMe-p.receivedEarly);return p;
 }
-const bridgeReady=()=>!!(ST.opening&&(ST.opening.eur>0||ST.deals.some(d=>d.eurDone)));
-function monthSummary(y,m){
-  const L=ST.deals.filter(d=>d.date.y===y&&d.date.m===m);
-  return{buyE:L.filter(d=>d.kind==='buy').reduce((s,d)=>s+d.eur,0),buyT:L.filter(d=>d.kind==='buy').reduce((s,d)=>s+tom(d),0),
-         sellE:L.filter(d=>d.kind==='sell').reduce((s,d)=>s+d.eur,0),sellT:L.filter(d=>d.kind==='sell').reduce((s,d)=>s+tom(d),0),n:L.length};
+const bridgeTarget=()=>bridgeParts().target;
+// ready once real currency is on record: an opening balance OR at least one confirmed deal
+const bridgeReady=()=>!!(ST.started&&(ST.openings.some(o=>(+o.sahar||0)+(+o.me||0)>0)||ST.deals.some(d=>d.done)));
+function monthSummary(y,m,c){
+  const L=ST.deals.filter(d=>d.cur===c&&d.date.y===y&&d.date.m===m);const S=ST.spends.filter(s=>s.cur===c&&s.date.y===y&&s.date.m===m);const sc=vault(c).spendCost;
+  return{buyA:L.filter(d=>d.kind==='buy').reduce((s,d)=>s+d.amt,0),buyT:L.filter(d=>d.kind==='buy').reduce((s,d)=>s+tom(d),0),
+         sellA:L.filter(d=>d.kind==='sell').reduce((s,d)=>s+d.amt,0),sellT:L.filter(d=>d.kind==='sell').reduce((s,d)=>s+tom(d),0),
+         spA:S.reduce((s,x)=>s+x.amt,0),spT:S.reduce((s,x)=>s+(sc[x.id]||0),0)};
 }
 
 // ============================================================
@@ -375,7 +343,12 @@ const DBN='sarafi',STORE='kv';
 function idb(){return new Promise((res,rej)=>{const r=indexedDB.open(DBN,1);r.onupgradeneeded=()=>r.result.createObjectStore(STORE);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error);});}
 async function dbGet(k){const db=await idb();return new Promise((res,rej)=>{const q=db.transaction(STORE,'readonly').objectStore(STORE).get(k);q.onsuccess=()=>res(q.result);q.onerror=()=>rej(q.error);});}
 async function dbSet(k,v){const db=await idb();return new Promise((res,rej)=>{const tx=db.transaction(STORE,'readwrite');tx.objectStore(STORE).put(v,k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error);});}
-async function loadState(){try{ST=normalize(await dbGet('state'));}catch(e){try{ST=normalize(JSON.parse(localStorage.getItem('sarafi_state')||'null'));}catch(_){ST=def();}}}
+async function loadState(){
+  let raw=null;try{raw=await dbGet('state');}catch(e){try{raw=JSON.parse(localStorage.getItem('sarafi_state')||'null');}catch(_){}}
+  // v2.0: keep an untouched copy of the euro-only data before the one-time upgrade
+  if(raw&&!(raw.v>=2)){try{await dbSet('state_v1_backup',JSON.parse(JSON.stringify(raw)));}catch(e){}}
+  ST=normalize(raw);if(raw&&!(raw.v>=2))await sv();
+}
 let UNDO=null;
 async function sv(){const snap=JSON.parse(JSON.stringify(ST));try{await dbSet('state',snap);}catch(e){try{localStorage.setItem('sarafi_state',JSON.stringify(snap));}catch(_){ntf('ذخیره انجام نشد');}}
   if(typeof ghSchedule==='function')ghSchedule();if(typeof schedulePublish==='function')schedulePublish();}
@@ -387,6 +360,7 @@ function openSheet(html){$('sheet').innerHTML=html;$('ov').classList.add('on');}
 function closeSheet(){$('ov').classList.remove('on');}
 function fmtIn(el){const v=toLn(el.value);el.value=v?nf(v):'';}
 function money(id,v,ph,extra){return `<input id="${id}" inputmode="numeric" autocomplete="off" placeholder="${ph||'۰'}" value="${v?nf(v):''}" oninput="fmtIn(this);${extra||''}">`;}
+function decIn(id,v,extra){return `<input id="${id}" inputmode="decimal" autocomplete="off" placeholder="۰" value="${v?toFa(v):''}"${extra?` oninput="${extra}"`:''}>`;}
 function dateIn(id,d){d=d||today();return `<div class="dt"><input id="${id}_d" inputmode="numeric" value="${toFa(d.d)}" aria-label="روز"><select id="${id}_m" aria-label="ماه">${MFA.map((n,i)=>`<option value="${i}"${i===d.m?' selected':''}>${n}</option>`).join('')}</select><input id="${id}_y" inputmode="numeric" value="${toFa(d.y)}" aria-label="سال"></div>`;}
 function readDate(id){const d=parseInt(normDigits(val(id+'_d'))),m=parseInt(val(id+'_m')),y=parseInt(normDigits(val(id+'_y')));if(!(y>1300&&y<1500)||isNaN(m)||!(d>=1&&d<=jMonthLen(y,m)))return null;return{y,m,d};}
 function field(label,inner,hint){return `<label class="f"><span>${label}</span>${inner}${hint?`<small>${hint}</small>`:''}</label>`;}
@@ -395,11 +369,27 @@ function errIn(id,msg){ntf(msg);const e=$(id)||$(id+'_d');if(e){e.classList.add(
 function applyTheme(){const pref=ST.settings.theme||'auto';const dark=pref==='dark'||(pref==='auto'&&window.matchMedia&&matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.dataset.theme=dark?'dark':'light';const m=document.querySelector('meta[name="theme-color"]');if(m)m.content=dark?'#0A1222':'#15243F';}
 const ICO={late:'<path d="M12 8v5M12 16.5h.01"/><circle cx="12" cy="12" r="9"/>',up:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',ok:'<path d="M5 12.5l4.5 4.5L19 7.5"/>',
-  in:'<path d="M12 4v13M6 11l6 6 6-6"/><path d="M4 20h16"/>',out:'<path d="M12 20V7M6 13l6-6 6 6"/><path d="M4 4h16"/>',rate:'<path d="M4 17l5-5 4 4 7-8"/><path d="M15 8h5v5"/>'};
+  in:'<path d="M12 4v13M6 11l6 6 6-6"/><path d="M4 20h16"/>',out:'<path d="M12 20V7M6 13l6-6 6 6"/><path d="M4 4h16"/>',
+  move:'<path d="M17 3l4 4-4 4M21 7H9M7 21l-4-4 4-4M3 17h12"/>',spend:'<rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h4"/>'};
 const svg=(k,cls)=>`<svg class="${cls||'ic'}" viewBox="0 0 24 24" aria-hidden="true">${ICO[k]}</svg>`;
-const eu=n=>toFa((Math.round(n*100)/100).toLocaleString('en-US').replace(/,/g,'٬'))+' €';
+// isolated (FSI…PDI) so «۱٬۰۰۰ €» never gets scrambled inside Persian sentences
+const fx=(n,c)=>'\u2068'+toFa(r2(n).toLocaleString('en-US').replace(/,/g,'٬'))+' '+CUR[c||'EUR'].s+'\u2069';
 const mask=s=>SHOW?s:'••••••';
-const kindL=d=>d.kind==='buy'?'یورو گرفتم':'یورو دادم';
+const kindL=d=>d.kind==='buy'?'خرید':'فروش';
+// what step 1 of a deal means, by direction and place
+const stepTxt=(kind,loc)=>kind==='buy'?(loc==='sahar'?'سحر از طرف گرفت':'خودم تحویل گرفتم'):(loc==='sahar'?'سحر به طرف داد':'خودم تحویل دادم');
+const dealHint=(kind,loc)=>kind==='buy'?(loc==='sahar'?'سحر ارز را از طرف می‌گیرد؛ شما تومان را می‌پردازید.':'ارز را خودتان تحویل می‌گیرید؛ شما تومان را می‌پردازید.')
+  :(loc==='sahar'?'سحر از صندوق به طرف ارز می‌دهد؛ طرف به شما تومان واریز می‌کند.':'خودتان ارز را تحویل می‌دهید؛ طرف به شما تومان واریز می‌کند.');
+function curSeg(){if(!multi())return'';const c=CV();
+  return `<div class="seg cur">${['EUR','USD'].map(k=>`<button class="${k===c?'on':''}" onclick="setCV('${k}')">${CUR[k].s} ${CUR[k].n}</button>`).join('')}</div>`;}
+async function setCV(c){ST.settings.cur=c;render();try{await dbSet('state',JSON.parse(JSON.stringify(ST)));}catch(e){}}
+// small segmented picker inside forms: segPick('d_cur',[['EUR','€ یورو'],…],'EUR','dSync()')
+function segPick(id,opts,cur,on){return `<div class="seg" id="${id}" data-v="${cur}">${opts.map(([k,l])=>`<button type="button" data-k="${k}" class="${k===cur?'on':''}" onclick="segSet('${id}','${k}');${on||''}">${l}</button>`).join('')}</div>`;}
+function segSet(id,k){const s=$(id);if(!s)return;s.dataset.v=k;s.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.k===k));}
+const segVal=(id,dflt)=>{const s=$(id);return s?s.dataset.v:dflt;};
+const curOpts=()=>['EUR','USD'].map(k=>[k,`${CUR[k].s} ${CUR[k].n}`]);
+const locOpts=()=>[['sahar',LOC.sahar],['me',LOC.me]];
+const defLoc=c=>ST.settings.loc[c]||(c==='EUR'?'sahar':'me');
 
 function render(){
   document.querySelectorAll('.tabs button[data-t]').forEach(b=>b.classList.toggle('on',b.dataset.t===TAB));
@@ -409,99 +399,108 @@ function go(t){TAB=t;render();window.scrollTo(0,0);}
 
 // ---------------- Home ----------------
 function vHome(){
-  if(!ST.opening) return `<section class="empty"><h3>شروع: موجودی صندوق</h3>
-    <p>تعداد یورویی که الان در صندوق دارید و بهای تمام‌شدهٔ کل آن را وارد کنید. بعداً هم قابل اصلاح است.</p>
-    <button class="btn pri" onclick="openOpening()">ثبت موجودی اولیه</button>
-    <button class="btn" onclick="ST.opening={eur:0,cost:0,date:today()};sv().then(render)">از صفر شروع کن</button></section>`;
-  const v=vault(),e=exposures(),r=lastRate(),t=today();
-  const stale=!r||dayNum(t)-dayNum(r.date)>=1;
-  const rows=[];
-  e.iOwe.forEach(x=>rows.push(row('late',`تومانی که بدهکارم — ${esc(x.d.party||'بدون نام')}`,`${nf(x.amt)} تومان؛ یورو ${fmtD(x.d.eurDate||x.d.date)} رسیده`,`openDealView('${x.d.id}')`,'پرداخت')));
-  e.eurOwedMe.forEach(x=>rows.push(row('late',`یورویی که طلبکارم — ${esc(x.d.party||'بدون نام')}`,`${eu(x.amt)}؛ تومان پرداخت شده، سحر هنوز تأیید نکرده`,`openDealView('${x.d.id}')`,'تأیید')));
-  e.owedMe.forEach(x=>rows.push(row('up',`تومانی که طلبکارم — ${esc(x.d.party||'بدون نام')}`,`${nf(x.amt)} تومان؛ یورو تحویل شده`,`openDealView('${x.d.id}')`,'دریافت')));
-  e.eurIOwe.forEach(x=>rows.push(row('up',`یورویی که بدهکارم — ${esc(x.d.party||'بدون نام')}`,`${eu(x.amt)}؛ تومان دریافت شده، یورو هنوز تحویل نشده`,`openDealView('${x.d.id}')`,'تحویل')));
+  if(!ST.started) return `<section class="empty"><h3>شروع: موجودی صندوق</h3>
+    <p>ارزی که الان دارید (نزد سحر و نزد خودتان) و بهای تمام‌شدهٔ کل آن را وارد کنید. بعداً هم قابل اصلاح است.</p>
+    <button class="btn pri" onclick="openOpening('EUR')">ثبت موجودی اولیه</button>
+    <button class="btn" onclick="ST.started=true;sv().then(render)">از صفر شروع کن</button></section>`;
+  const c=CV(),v=vault(c),e=exposures(),r=lastRate(c);
+  const rows=[];const who=d=>esc(d.party||'بدون نام');
+  e.iOwe.forEach(x=>rows.push(row('late',`تومانی که بدهکارم — ${who(x.d)}`,`${nf(x.amt)} تومان؛ ${fx(x.d.amt,x.d.cur)} ${fmtD(x.d.doneDate||x.d.date)} رسیده`,`openDealView('${x.d.id}')`,'پرداخت')));
+  e.fxOwedMe.forEach(x=>rows.push(row('late',`ارزی که طلبکارم — ${who(x.d)}`,`${fx(x.amt,x.d.cur)}؛ تومان پرداخت شده، ${x.d.loc==='sahar'?'سحر هنوز تأیید نکرده':'هنوز تحویل نگرفته‌اید'}`,`openDealView('${x.d.id}')`,'تأیید')));
+  e.owedMe.forEach(x=>rows.push(row('up',`تومانی که طلبکارم — ${who(x.d)}`,`${nf(x.amt)} تومان؛ ${fx(x.d.amt,x.d.cur)} تحویل شده`,`openDealView('${x.d.id}')`,'دریافت')));
+  e.fxIOwe.forEach(x=>rows.push(row('up',`ارزی که بدهکارم — ${who(x.d)}`,`${fx(x.amt,x.d.cur)}؛ تومان دریافت شده، ارز هنوز تحویل نشده`,`openDealView('${x.d.id}')`,'تحویل')));
   const open=ST.deals.filter(d=>!isDone(d)).sort((a,b)=>cmpD(b.date,a.date));
-  return `<section class="hero">
-    <div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">موجودی صندوق</p>
+  const totV=multi()?curs().reduce((s,k)=>{const x=vault(k);return s+(x.mkt?x.value:x.cost);},0):0;
+  return `${curSeg()}<section class="hero">
+    <div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">موجودی ${CUR[c].n}</p>
       <button class="eye" onclick="SHOW=!SHOW;render()" aria-label="نمایش یا پنهان کردن">${SHOW?'🙈':'👁'}</button></div>
-    <p class="hero-n">${mask(eu(v.eur))}</p>
+    <p class="hero-n">${mask(fx(v.amt,c))}</p>
+    ${v.me?`<p class="hero-s">${LOC.sahar}: <b>${mask(fx(v.sahar,c))}</b> · ${LOC.me}: <b>${mask(fx(v.me,c))}</b></p>`:''}
     <p class="hero-s">ارزش روز: <b>${mask(v.mkt?nf(v.value)+' تومان':'— (نرخ ثبت نشده)')}</b>${r?` · با نرخ ${nf(r.rate)} (${rateAge(r)})`:''}</p>
-    <div class="hkpis"><div><small>میانگین بهای هر یورو</small><b>${mask(nf(v.avg))}</b></div><div><small>نرخ روز</small><b>${r?nf(r.rate):'—'}</b></div><div><small>سود/زیان ارزش</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':mask((v.unreal<0?'−':'+')+nf(Math.abs(v.unreal)))}</b></div></div>
+    ${multi()?`<p class="hero-s">ارزش کل همهٔ ارزها: <b>${mask(nf(totV)+' تومان')}</b></p>`:''}
+    <div class="hkpis"><div><small>میانگین بهای هر ${CUR[c].n}</small><b>${mask(nf(v.avg))}</b></div><div><small>نرخ روز</small><b>${r?nf(r.rate):'—'}</b></div><div><small>سود/زیان ارزش</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':mask((v.unreal<0?'−':'+')+nf(Math.abs(v.unreal)))}</b></div></div>
   </section>
-  ${rateCard()}
-  ${ST.bridge.length?`<h3 class="sec">پرداخت‌های ارسالی از «سرمایه»</h3><div class="list">${ST.bridge.map(b=>`<button class="row tap" onclick="openSfBridge('${b.id}')"><span class="ri r-up">${svg(b.kind==='pay'?'out':'in')}</span><div class="rb"><b>${b.kind==='pay'?'پرداخت':'دریافت'} ${nf(b.a)} تومان</b><small>${esc(b.bank||'')}${b.acc?' · '+esc(b.acc):''} · ${fmtD(b.date)} — ${(m=>m?`<b style="color:var(--ok,#1a8f4c)">✓ ظاهراً در معاملهٔ «${esc(m.d.party||'بدون نام')}» ثبت شده</b>`:'لمس کنید تا به معامله وصل شود')(bridgeMatch(b))}</small></div></button>`).join('')}</div>`:''}
+  ${rateCard(c)}
+  ${ST.bridge.length?`<h3 class="sec">پرداخت‌های ارسالی از «سرمایه»</h3><div class="list">${ST.bridge.map(b=>`<button class="row tap" onclick="openSfBridge('${b.id}')"><span class="ri r-up">${svg(b.kind==='pay'?'out':'in')}</span><div class="rb"><b>${b.kind==='pay'?'پرداخت':'دریافت'} ${nf(b.a)} تومان</b><small>${esc(b.bank||'')}${b.acc?' · '+esc(b.acc):''} · ${fmtD(b.date)} — ${(m=>m?`<b style="color:var(--ok)">✓ ظاهراً در معاملهٔ «${esc(m.d.party||'بدون نام')}» ثبت شده</b>`:'لمس کنید تا به معامله وصل شود')(bridgeMatch(b))}</small></div></button>`).join('')}</div>`:''}
   <h3 class="sec">کارهای من</h3><div class="list">${rows.length?rows.join(''):`<div class="row"><span class="ri r-ok">${svg('ok')}</span><div class="rb"><b>کاری باقی نمانده است</b></div></div>`}</div>
   <h3 class="sec">معاملات باز</h3>${open.length?`<div class="list">${open.map(dealRow).join('')}</div>`:'<p class="dim">معاملهٔ بازی ندارید.</p>'}
-  <button class="btn pri" onclick="openDeal()">➕ معاملهٔ جدید</button>`;
+  <button class="btn pri" onclick="openDeal()">➕ معاملهٔ جدید</button>
+  <div class="acts"><button class="btn" onclick="openSpend()">💳 خرج ارزی</button><button class="btn" onclick="openMove()">⇄ جابه‌جایی</button></div>`;
 }
-function row(ic,title,sub,act,btn){return `<div class="row"><span class="ri ${ic==='late'?'r-late':ic==='ok'?'r-ok':'r-up'}">${svg(ic==='rate'?'rate':ic==='late'?'late':'up')}</span><div class="rb"><b>${title}</b><small>${sub}</small></div><div class="ra"><button class="mini ok" onclick="${act}">${btn}</button></div></div>`;}
+function row(ic,title,sub,act,btn){return `<div class="row"><span class="ri ${ic==='late'?'r-late':ic==='ok'?'r-ok':'r-up'}">${svg(ic==='late'?'late':'up')}</span><div class="rb"><b>${title}</b><small>${sub}</small></div><div class="ra"><button class="mini ok" onclick="${act}">${btn}</button></div></div>`;}
 function dealRow(d){
-  const rem=remT(d);const chips=`<span class="chip ${d.eurDone?'ok':'bad'}">${d.kind==='buy'?'یورو رسید':'یورو تحویل'} ${d.eurDone?'✓':'✗'}</span><span class="chip ${rem<=0?'ok':'bad'}">${rem<=0?'تومان تسویه ✓':'تومان مانده '+nf(rem)}</span>`;
-  return `<button class="row tap" onclick="openDealView('${d.id}')"><span class="ri ${d.kind==='buy'?'r-ok':'r-up'}">${svg(d.kind==='buy'?'in':'out')}</span><div class="rb"><b>${kindL(d)} · ${eu(d.eur)} · ${esc(d.party||'بدون نام')}</b><small>${fmtD(d.date)} · نرخ ${nf(d.rate)} · ${nf(tom(d))} تومان</small><div class="chips">${chips}</div></div></button>`;
+  const rem=remT(d);const chips=`<span class="chip ${d.done?'ok':'bad'}">${d.kind==='buy'?'ارز رسید':'ارز تحویل'} ${d.done?'✓':'✗'}</span><span class="chip ${rem<=0?'ok':'bad'}">${rem<=0?'تومان تسویه ✓':'تومان مانده '+nf(rem)}</span>`;
+  return `<button class="row tap" onclick="openDealView('${d.id}')"><span class="ri ${d.kind==='buy'?'r-ok':'r-up'}">${svg(d.kind==='buy'?'in':'out')}</span><div class="rb"><b>${kindL(d)} ${fx(d.amt,d.cur)} · ${esc(d.party||'بدون نام')}</b><small>${fmtD(d.date)} · نرخ ${nf(d.rate)} · ${nf(tom(d))} تومان${d.loc==='me'?' · '+LOC.me:''}</small><div class="chips">${chips}</div></div></button>`;
 }
 // ---------------- Deals ----------------
 function vDeals(){
   const L=ST.deals.filter(d=>DF==='all'||!isDone(d)).sort((a,b)=>cmpD(b.date,a.date)||(b.at||0)-(a.at||0));
-  return `<div class="seg"><button class="${DF==='open'?'on':''}" onclick="DF='open';render()">باز</button><button class="${DF==='all'?'on':''}" onclick="DF='all';render()">همه</button></div>
-  ${L.length?`<div class="list">${L.map(dealRow).join('')}</div>`:`<p class="dim">${DF==='open'?'معاملهٔ بازی ندارید.':'هنوز معامله‌ای ثبت نشده.'}</p>`}
+  return `<div class="seg" style="margin-top:16px"><button class="${DF==='open'?'on':''}" onclick="DF='open';render()">باز</button><button class="${DF==='all'?'on':''}" onclick="DF='all';render()">همه</button></div>
+  <div style="margin-top:12px">${L.length?`<div class="list">${L.map(dealRow).join('')}</div>`:`<p class="dim">${DF==='open'?'معاملهٔ بازی ندارید.':'هنوز معامله‌ای ثبت نشده.'}</p>`}</div>
   <button class="btn pri" onclick="openDeal()">➕ معاملهٔ جدید</button>`;
 }
 function openDeal(id,bid){
-  const d=id?byId(ST.deals,id):null;const r=lastRate();const bb=(!d&&bid)?ST.bridge.find(x=>x.id===bid):null;const k=d?d.kind:bb?(bb.kind==='pay'?'buy':'sell'):'buy';
+  const d=id?byId(ST.deals,id):null;const bb=(!d&&bid)?ST.bridge.find(x=>x.id===bid):null;
+  const k=d?d.kind:bb?(bb.kind==='pay'?'buy':'sell'):'buy';const c=d?d.cur:CV();const l=d?d.loc:defLoc(c);const r=lastRate(c);
   openSheet(`${sheetHead(d?'ویرایش معامله':'معاملهٔ جدید')}
-  <div class="seg"><button id="k_buy" class="${k==='buy'?'on':''}" onclick="dk('buy')">یورو می‌گیرم</button><button id="k_sell" class="${k==='sell'?'on':''}" onclick="dk('sell')">یورو می‌دهم</button></div>
-  <p class="dim" id="k_hint">${k==='buy'?'سحر یورو را از طرف می‌گیرد؛ شما تومان را می‌پردازید.':'سحر از صندوق به طرف یورو می‌دهد؛ طرف به شما تومان واریز می‌کند.'}</p>
+  ${segPick('d_kind',[['buy','خرید ارز'],['sell','فروش ارز']],k,'dSync()')}
+  ${multi()?`<div style="margin-top:8px">${segPick('d_cur',curOpts(),c,'dSync(1)')}</div>`:''}
+  <div style="margin-top:8px">${segPick('d_loc',locOpts(),l,'dSync()')}</div>
+  <p class="dim" id="k_hint" style="margin:8px 2px 10px">${dealHint(k,l)}</p>
   ${bb?`<p class="note">پس از ذخیره، ${bb.kind==='pay'?'پرداخت':'دریافت'} ${nf(bb.a)} تومان (${fmtD(bb.date)}) از «سرمایه» خودکار به این معامله وصل و از فهرست برداشته می‌شود؛ لازم نیست آن را دستی وارد کنید.</p>`:''}
   ${field('تاریخ',dateIn('d_date',d?d.date:bb?bb.date:today()))}
   ${field('نام طرف',`<input id="d_party" value="${esc(d?d.party:'')}" autocomplete="off">`)}
-  ${field('مقدار یورو',`<input id="d_eur" inputmode="decimal" value="${d?toFa(d.eur):''}" oninput="dCalc()" autocomplete="off">`)}
-  ${field('نرخ شما (تومان برای هر یورو)',money('d_rate',d?d.rate:0,'',`dCalc()`),r?`نرخ روز: ${nf(r.rate)} (${fmtD(r.date)})`:'نرخ روز ثبت نشده')}
+  <label class="f"><span id="d_amt_l">مقدار ${CUR[c].n}</span>${decIn('d_amt',d?d.amt:0,'dCalc()')}</label>
+  <label class="f"><span id="d_rate_l">نرخ شما (تومان برای هر ${CUR[c].n})</span>${money('d_rate',d?d.rate:0,'','dCalc()')}<small id="d_rate_h">${r?`نرخ روز: ${nf(r.rate)} (${fmtD(r.date)})`:'نرخ روز ثبت نشده'}</small></label>
   ${field('نرخ بازار در همان روز (اختیاری)',money('d_mkt',d?d.mkt:(r?r.rate:0)))}
   <p class="note" id="d_total"></p>
   ${field('یادداشت',`<input id="d_note" value="${esc(d?d.note:'')}">`)}
   <button class="btn pri" onclick="saveDeal('${id||''}')">ذخیره</button>
   ${d?`<button class="btn danger" onclick="delDeal('${id}')">حذف معامله</button>`:''}`);
-  window._dk=k;window._bid=bb?bb.id:'';dCalc();
+  window._bid=bb?bb.id:'';dCalc();
 }
-function dk(k){window._dk=k;$('k_buy').classList.toggle('on',k==='buy');$('k_sell').classList.toggle('on',k==='sell');
-  $('k_hint').textContent=k==='buy'?'سحر یورو را از طرف می‌گیرد؛ شما تومان را می‌پردازید.':'سحر از صندوق به طرف یورو می‌دهد؛ طرف به شما تومان واریز می‌کند.';}
-const pEur=()=>parseFloat(normDigits(val('d_eur')).replace(/[٫,]/g,'.'))||0;
-function dCalc(){const t=Math.round(pEur()*toLn(val('d_rate')));$('d_total').textContent=t?`مبلغ تومانی: ${nf(t)} تومان`:'';}
+function dSync(curChanged){
+  const k=segVal('d_kind','buy'),c=segVal('d_cur','EUR');
+  if(curChanged){segSet('d_loc',defLoc(c));const r=lastRate(c);$('d_amt_l').textContent='مقدار '+CUR[c].n;$('d_rate_l').textContent=`نرخ شما (تومان برای هر ${CUR[c].n})`;
+    $('d_rate_h').textContent=r?`نرخ روز: ${nf(r.rate)} (${fmtD(r.date)})`:'نرخ روز ثبت نشده';$('d_mkt').value=r?nf(r.rate):'';}
+  $('k_hint').textContent=dealHint(k,segVal('d_loc','sahar'));
+}
+function dCalc(){const t=Math.round(toDec(val('d_amt'))*toLn(val('d_rate')));$('d_total').textContent=t?`مبلغ تومانی: ${nf(t)} تومان`:'';}
 async function saveDeal(id){
   const date=readDate('d_date');if(!date)return errIn('d_date','تاریخ نامعتبر است');
-  const eur=pEur(),rate=toLn(val('d_rate'));if(!(eur>0))return errIn('d_eur','مقدار یورو را وارد کنید');if(!(rate>0))return errIn('d_rate','نرخ را وارد کنید');
-  const x={kind:window._dk,date,party:val('d_party'),eur,rate,mkt:toLn(val('d_mkt')),note:val('d_note')};
-  if(id){await commit(()=>{const d=byId(ST.deals,id);Object.assign(d,{kind:x.kind,date,party:x.party.trim(),eur,rate,mkt:x.mkt,note:x.note.trim()});},'معامله ویرایش شد');openDealView(id);}
+  const amt=toDec(val('d_amt')),rate=toLn(val('d_rate'));if(!(amt>0))return errIn('d_amt','مقدار ارز را وارد کنید');if(!(rate>0))return errIn('d_rate','نرخ را وارد کنید');
+  const x={kind:segVal('d_kind','buy'),cur:segVal('d_cur','EUR'),loc:segVal('d_loc','sahar'),date,party:val('d_party'),amt,rate,mkt:toLn(val('d_mkt')),note:val('d_note')};
+  if(id){await commit(()=>{const d=byId(ST.deals,id);Object.assign(d,{kind:x.kind,cur:x.cur,loc:x.loc,date,party:x.party.trim(),amt,rate,mkt:x.mkt,note:x.note.trim()});ST.settings.loc[x.cur]=x.loc;},'معامله ویرایش شد');openDealView(id);}
   else{let nd;const bid=window._bid||'';const b=bid?ST.bridge.find(z=>z.id===bid):null;
-    const ok=await commit(()=>{nd=addDeal(x);if(b){addPay(nd.id,{date:b.date,amount:b.a,ref:[b.bank,b.acc].filter(Boolean).join(' · '),force:true});ST.bridge=ST.bridge.filter(z=>z.id!==bid);ST.bridgeDone[bid]=1;}},b?'معامله ثبت شد و پرداخت به آن وصل شد':'معامله ثبت شد');
+    const ok=await commit(()=>{nd=addDeal(x);ST.settings.loc[x.cur]=x.loc;if(b){addPay(nd.id,{date:b.date,amount:b.a,ref:[b.bank,b.acc].filter(Boolean).join(' · ')});ST.bridge=ST.bridge.filter(z=>z.id!==bid);ST.bridgeDone[bid]=1;}},b?'معامله ثبت شد و پرداخت به آن وصل شد':'معامله ثبت شد');
     window._bid='';if(ok&&b)sfInboxRemove(bid).catch(()=>{});if(nd)openDealView(nd.id);}
 }
 async function delDeal(id){if(!confirm('این معامله حذف شود؟'))return;await commit(()=>{ST.deals=ST.deals.filter(d=>d.id!==id);},'معامله حذف شد');}
 function openDealView(id){
-  const d=byId(ST.deals,id);if(!d)return;const rem=remT(d);const buy=d.kind==='buy';
-  openSheet(`${sheetHead(`${kindL(d)} · ${eu(d.eur)}`,`${esc(d.party||'بدون نام')} · ${fmtD(d.date)}`)}
+  const d=byId(ST.deals,id);if(!d)return;const rem=remT(d);const buy=d.kind==='buy';const g=d.done&&!buy?vault(d.cur).dealGain[d.id]:null;
+  openSheet(`${sheetHead(`${kindL(d)} ${CUR[d.cur].n} · ${fx(d.amt,d.cur)}`,`${esc(d.party||'بدون نام')} · ${fmtD(d.date)} · ${LOC[d.loc]}`)}
   <div class="kpis"><div><small>نرخ شما</small><b>${nf(d.rate)}</b></div><div><small>مبلغ تومانی</small><b>${nf(tom(d))}</b></div>
-   ${d.mkt?`<div><small>نرخ بازار</small><b>${nf(d.mkt)}</b></div><div><small>${buy?'تخفیف نسبت به بازار':'اختلاف با بازار'}</small><b>${nf(Math.round(d.eur*(buy?d.mkt-d.rate:d.rate-d.mkt)))}</b></div>`:''}</div>
-  <h3 class="sec">۱) یورو ${buy?'(سحر از طرف گرفت)':'(سحر به طرف داد)'}</h3>
-  ${d.eurDone?`<div class="row"><span class="ri r-ok">${svg('ok')}</span><div class="rb"><b>تأیید شد</b><small>${fmtD(d.eurDate||d.date)}</small></div><div class="ra"><button class="mini" onclick="eurToggle('${id}',false)">لغو</button></div></div>`
-   :`<div class="row"><span class="ri r-late">${svg('late')}</span><div class="rb"><b>هنوز تأیید نشده</b></div><div class="ra"><button class="mini ok" onclick="eurToggle('${id}',true)">تأیید امروز</button></div></div>`}
+   ${d.mkt?`<div><small>نرخ بازار</small><b>${nf(d.mkt)}</b></div><div><small>${buy?'تخفیف نسبت به بازار':'اختلاف با بازار'}</small><b>${nf(Math.round(d.amt*(buy?d.mkt-d.rate:d.rate-d.mkt)))}</b></div>`:''}
+   ${g!=null?`<div><small>سود این فروش (نسبت به میانگین خرید)</small><b class="${g<0?'is-late':''}">${(g<0?'−':'+')+nf(Math.abs(g))}</b></div>`:''}</div>
+  <h3 class="sec">۱) ارز (${stepTxt(d.kind,d.loc)})</h3>
+  ${d.done?`<div class="row"><span class="ri r-ok">${svg('ok')}</span><div class="rb"><b>تأیید شد</b><small>${fmtD(d.doneDate||d.date)}</small></div><div class="ra"><button class="mini" onclick="doneToggle('${id}',false)">لغو</button></div></div>`
+   :`<div class="row"><span class="ri r-late">${svg('late')}</span><div class="rb"><b>هنوز تأیید نشده</b></div><div class="ra"><button class="mini ok" onclick="doneToggle('${id}',true)">تأیید امروز</button></div></div>`}
   <h3 class="sec">۲) تومان ${buy?'(شما پرداخت می‌کنید)':'(طرف واریز می‌کند)'} — ${rem<=0?'تسویه ✓':'مانده '+nf(rem)}</h3>
-  <div class="list">${d.pays.map(p=>`<div class="row"><span class="ri r-ok">${svg('ok')}</span><div class="rb"><b>${nf(p.amount)} تومان</b><small>${fmtD(p.date)}${p.ref?' · '+esc(p.ref):''}</small></div><div class="ra"><button class="mini" onclick="delPay('${id}','${p.id}')">حذف</button></div></div>`).join('')}</div>
-  ${rem>0&&d.pays.length<3?`<div class="g2">${field('مبلغ',money('p_amt',rem))}${field(buy?'به کارت / حساب':'از / به حساب',`<input id="p_ref" placeholder="${buy?'مثلاً کارت ۶۰۳۷…':'مثلاً تجارت'}">`)}</div>
+  ${d.pays.length?`<div class="list">${d.pays.map(p=>`<div class="row"><span class="ri r-ok">${svg('ok')}</span><div class="rb"><b>${nf(p.amount)} تومان</b><small>${fmtD(p.date)}${p.ref?' · '+esc(p.ref):''}</small></div><div class="ra"><button class="mini" onclick="delPay('${id}','${p.id}')">حذف</button></div></div>`).join('')}</div>`:''}
+  ${rem>0?`<div class="g2">${field('مبلغ',money('p_amt',rem))}${field(buy?'به کارت / حساب':'از / به حساب',`<input id="p_ref" placeholder="${buy?'مثلاً کارت ۶۰۳۷…':'مثلاً تجارت'}">`)}</div>
     ${field('تاریخ',dateIn('p_date',today()))}<button class="btn pri" onclick="savePay('${id}')">ثبت ${buy?'پرداخت':'دریافت'}</button>`:''}
-  ${rem>0&&d.pays.length>=3?'<p class="dim">حداکثر سه ردیف پرداخت؛ برای اصلاح، یک ردیف را حذف کنید.</p>':''}
   ${d.note?`<p class="note">${esc(d.note)}</p>`:''}
   <div class="acts"><button class="btn" onclick="openDeal('${id}')">ویرایش</button><button class="btn" onclick="shareDeal('${id}')">اشتراک‌گذاری</button></div>`);
 }
-async function eurToggle(id,on){await commit(()=>setEurDone(id,on,today()),on?'تأیید یورو ثبت شد':'تأیید یورو لغو شد');openDealView(id);}
+async function doneToggle(id,on){await commit(()=>setDone(id,on,today()),on?'تأیید ارز ثبت شد':'تأیید ارز لغو شد');openDealView(id);}
 async function savePay(id){const date=readDate('p_date');if(!date)return errIn('p_date','تاریخ نامعتبر است');const a=toLn(val('p_amt'));if(!(a>0))return errIn('p_amt','مبلغ را وارد کنید');
   if(a>remT(byId(ST.deals,id))&&!confirm('مبلغ از باقی‌مانده بیشتر است. ثبت شود؟'))return;
   await commit(()=>addPay(id,{date,amount:a,ref:val('p_ref')}),'ثبت شد');openDealView(id);}
 async function delPay(id,pid){if(!confirm('این ردیف حذف شود؟'))return;await commit(()=>{const d=byId(ST.deals,id);d.pays=d.pays.filter(p=>p.id!==pid);},'ردیف حذف شد');openDealView(id);}
-async function shareDeal(id){const d=byId(ST.deals,id);const txt=`${kindL(d)}: ${eu(d.eur)}\nنرخ: ${nf(d.rate)} تومان\nمبلغ: ${nf(tom(d))} تومان\nتاریخ: ${fmtD(d.date)}\nپرداخت/دریافت: ${nf(paidT(d))} — مانده ${nf(Math.max(0,remT(d)))}`;
+async function shareDeal(id){const d=byId(ST.deals,id);const txt=`${kindL(d)} ${CUR[d.cur].n}: ${fx(d.amt,d.cur)}\nنرخ: ${nf(d.rate)} تومان\nمبلغ: ${nf(tom(d))} تومان\nتاریخ: ${fmtD(d.date)}\nپرداخت/دریافت: ${nf(paidT(d))} — مانده ${nf(Math.max(0,remT(d)))}`;
   try{if(navigator.share)await navigator.share({text:txt});else{await navigator.clipboard.writeText(txt);ntf('متن کپی شد');}}catch(e){}}
-// ---------------- v1.1: payments sent from «سرمایه» ----------------
-// v1.6: a payment with the same amount within ±2 days already in a deal → probably entered by hand
+// ---------------- payments sent from «سرمایه» ----------------
+// a payment with the same amount within ±2 days already in a deal → probably entered by hand
 function bridgeMatch(b,dealId){const n=dayNum(b.date);
   for(const d of ST.deals){if(dealId&&d.id!==dealId)continue;const p=(d.pays||[]).find(p=>Math.abs(p.amount-b.a)<=1&&Math.abs(dayNum(p.date)-n)<=2);if(p)return{d,p};}return null;}
 function openSfBridge(id){
@@ -509,96 +508,148 @@ function openSfBridge(id){
   const L=ST.deals.filter(d=>d.kind===kind&&remT(d)>0).sort((p,q)=>Math.abs(remT(p)-b.a)-Math.abs(remT(q)-b.a));
   openSheet(`${sheetHead((b.kind==='pay'?'پرداخت ':'دریافت ')+nf(b.a)+' تومان',esc(b.bank||'')+' · '+fmtD(b.date))}
   <p class="dim">این ${b.kind==='pay'?'پرداخت':'دریافت'} مربوط به کدام معامله است؟ معاملهٔ هم‌مبلغ بالای فهرست است.</p>
-  ${L.length?`<div class="list">${L.map(d=>`<button class="row tap" onclick="sfAssign('${id}','${d.id}')"><div class="rb"><b>${esc(d.party||'بدون نام')} · ${eu(d.eur)}</b><small>${fmtD(d.date)} · مانده ${nf(remT(d))} تومان${remT(d)===b.a?' · ✓ هم‌مبلغ':''}</small></div></button>`).join('')}</div>`:'<p class="note">معاملهٔ بازی با این نوع نیست. اول معامله را ثبت کنید، بعد دوباره همین‌جا بزنید.</p>'}
-  ${(m=>m?`<p class="note">✓ پرداختی با همین مبلغ (${fmtD(m.p.date)}) در معاملهٔ «${esc(m.d.party||'بدون نام')} · ${eu(m.d.eur)}» ثبت شده است. اگر همان است، فقط این مورد را ببندید تا دوباره ثبت نشود.</p><button class="btn pri" onclick="sfDone('${id}')">ثبت شده است، ببند</button>`:'')(bridgeMatch(b))}
+  ${L.length?`<div class="list">${L.map(d=>`<button class="row tap" onclick="sfAssign('${id}','${d.id}')"><div class="rb"><b>${esc(d.party||'بدون نام')} · ${fx(d.amt,d.cur)}</b><small>${fmtD(d.date)} · مانده ${nf(remT(d))} تومان${remT(d)===b.a?' · ✓ هم‌مبلغ':''}</small></div></button>`).join('')}</div>`:'<p class="note">معاملهٔ بازی با این نوع نیست. «معاملهٔ جدید» بزنید.</p>'}
+  ${(m=>m?`<p class="note">✓ پرداختی با همین مبلغ (${fmtD(m.p.date)}) در معاملهٔ «${esc(m.d.party||'بدون نام')} · ${fx(m.d.amt,m.d.cur)}» ثبت شده است. اگر همان است، فقط این مورد را ببندید تا دوباره ثبت نشود.</p><button class="btn pri" onclick="sfDone('${id}')">ثبت شده است، ببند</button>`:'')(bridgeMatch(b))}
   <div class="acts"><button class="btn" onclick="closeSheet();openDeal('','${id}')">معاملهٔ جدید (همین پرداخت به آن وصل می‌شود)</button><button class="btn" onclick="sfIgnore('${id}')">نادیده</button></div>`);
 }
 async function sfAssign(id,dealId){const b=ST.bridge.find(x=>x.id===id);if(!b)return;
   {const m=bridgeMatch(b,dealId);if(m&&!confirm(`⚠️ در این معامله پرداختی با همین مبلغ (${nf(m.p.amount)} تومان، ${fmtD(m.p.date)}) ثبت شده است.\nدوباره ثبت شود؟\n\n(اگر همان پرداخت است، «لغو» و سپس «ثبت شده است، ببند» را بزنید.)`))return;}
-  const ok=await commit(()=>{addPay(dealId,{date:b.date,amount:b.a,ref:[b.bank,b.acc].filter(Boolean).join(' · '),force:true});ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'به معامله وصل شد');
+  const ok=await commit(()=>{addPay(dealId,{date:b.date,amount:b.a,ref:[b.bank,b.acc].filter(Boolean).join(' · ')});ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'به معامله وصل شد');
   if(ok)sfInboxRemove(id).catch(()=>{});}
 async function sfDone(id){const ok=await commit(()=>{ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'بسته شد — پرداخت قبلاً در معامله ثبت شده بود');if(ok)sfInboxRemove(id).catch(()=>{});}
 async function sfIgnore(id){const ok=await commit(()=>{ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'نادیده گرفته شد');if(ok)sfInboxRemove(id).catch(()=>{});}
-// ---------------- v1.3: today's rate on Home (optional, latest entry always wins) ----------------
+// ---------------- today's rate (per currency; latest entry always wins) ----------------
 function rateAge(r){if(!r)return'';const dd=dayNum(today())-dayNum(r.date);
   if(dd<=0){const h=r.at?new Date(r.at):null;return 'امروز'+(h&&dd===0?' ساعت '+toFa(String(h.getHours()).padStart(2,'0')+':'+String(h.getMinutes()).padStart(2,'0')):'');}
   return dd===1?'دیروز':toFa(dd)+' روز پیش';}
-function rateCard(){
-  const r=lastRate();const stale=!r||dayNum(today())-dayNum(r.date)>=1;
+function rateCard(c){
+  const r=lastRate(c);const stale=!r||dayNum(today())-dayNum(r.date)>=1;
   return `<section class="ratebox${stale?' stale':''}">
-    <div class="rb-top"><small>نرخ روز یورو (تومان)</small><b>${r?nf(r.rate):'—'}</b><em>${r?'آخرین ثبت: '+rateAge(r):'هنوز ثبت نشده'}</em></div>
+    <div class="rb-top"><small>نرخ روز ${CUR[c].n} (تومان)</small><b>${r?nf(r.rate):'—'}</b><em>${r?'آخرین ثبت: '+rateAge(r):'هنوز ثبت نشده'}</em></div>
     <div class="rb-in"><input id="hr_v" inputmode="numeric" placeholder="نرخ جدید (اختیاری)" autocomplete="off" oninput="fmtIn(this)" onkeydown="if(event.key==='Enter')saveHomeRate()"><button class="btn pri" onclick="saveHomeRate()">ثبت</button></div>
     ${stale?`<p class="rb-warn">${r?`نرخ امروز ثبت نشده؛ ارزش و سود/زیان بر اساس نرخ ${rateAge(r)} است.`:'برای محاسبهٔ ارزش و سود/زیان، نرخ روز را وارد کنید.'}</p>`:''}
   </section>`;
 }
-function rateGuard(v){const r=lastRate();return !(r&&Math.abs(v-r.rate)/r.rate>0.15)||confirm(`نرخ جدید ${nf(v)} با نرخ قبلی ${nf(r.rate)} بیش از ۱۵٪ فرق دارد (شاید یک صفر کم یا زیاد شده). درست است؟`);}
-async function saveHomeRate(){const v=toLn(val('hr_v'));if(!(v>0))return errIn('hr_v','نرخ را وارد کنید');if(!rateGuard(v))return;await commit(()=>addRate(v,today()),'نرخ روز ثبت شد: '+nf(v));}
-// ---------------- Rate / opening / count ----------------
-function openRate(){const r=lastRate();openSheet(`${sheetHead('نرخ روز یورو','نرخ بازار آزاد (مثلاً از اپ «چند»)')}
-  ${field('نرخ هر یورو (تومان)',money('r_v',r?r.rate:0))}${field('تاریخ',dateIn('r_d',today()))}<button class="btn pri" onclick="saveRate()">ثبت</button>
-  ${ST.rates.length?`<h3 class="sec">نرخ‌های اخیر</h3><div class="list">${ST.rates.slice().sort((a,b)=>cmpD(b.date,a.date)||b.at-a.at).slice(0,8).map(x=>`<div class="row"><div class="rb"><b>${nf(x.rate)}</b><small>${fmtD(x.date)}</small></div></div>`).join('')}</div>`:''}`);}
-async function saveRate(){const d=readDate('r_d');if(!d)return errIn('r_d','تاریخ نامعتبر است');const v=toLn(val('r_v'));if(!(v>0))return errIn('r_v','نرخ را وارد کنید');if(!rateGuard(v))return;await commit(()=>addRate(v,d),'نرخ روز ثبت شد');}
-function openOpening(){const o=ST.opening||{eur:0,cost:861929153,date:today()};openSheet(`${sheetHead('موجودی اولیهٔ صندوق','یورویی که الان در صندوق دارید')}
-  ${field('تعداد یورو',`<input id="o_eur" inputmode="decimal" value="${o.eur?toFa(o.eur):''}">`)}
-  ${field('بهای تمام‌شدهٔ کل (تومان)',money('o_cost',o.cost),'پیش‌فرض: ۸۶۱٬۹۲۹٬۱۵۳ — جمع خرید یورو در صورتحساب تجارت')}
-  ${field('تاریخ',dateIn('o_d',o.date))}<button class="btn pri" onclick="saveOpening()">ذخیره</button>`);}
-async function saveOpening(){const eur=parseFloat(normDigits(val('o_eur')).replace(/[٫,]/g,'.'))||0;const d=readDate('o_d');if(!d)return errIn('o_d','تاریخ نامعتبر است');
-  await commit(()=>{ST.opening={eur,cost:toLn(val('o_cost')),date:d};},'موجودی اولیه ثبت شد');}
-function openCount(){const v=vault();openSheet(`${sheetHead('شمارش صندوق','تعداد واقعیِ یوروهای داخل صندوق')}
-  <p class="note">موجودی طبق دفتر: <b>${eu(v.eur)}</b></p>${field('یورو شمارش‌شده',`<input id="c_eur" inputmode="decimal">`)}${field('تاریخ',dateIn('c_d',today()))}
-  <button class="btn pri" onclick="saveCount()">ثبت</button>`);}
-async function saveCount(){const e=parseFloat(normDigits(val('c_eur')).replace(/[٫,]/g,'.'));if(!(e>=0))return errIn('c_eur','عدد را وارد کنید');const d=readDate('c_d');
-  let c;await commit(()=>{c=addCount(e,d);},'شمارش ثبت شد');if(c&&Math.abs(c.eur-c.expected)>0.001)setTimeout(()=>alert(`اختلاف با دفتر: ${eu(c.eur-c.expected)}\nیک معامله یا تأیید جا افتاده، یا شمارش دوباره لازم است.`),300);}
+function rateGuard(v,c){const r=lastRate(c);return !(r&&Math.abs(v-r.rate)/r.rate>0.15)||confirm(`نرخ جدید ${CUR[c].n} (${nf(v)}) با نرخ قبلی ${nf(r.rate)} بیش از ۱۵٪ فرق دارد (شاید یک صفر کم یا زیاد شده). درست است؟`);}
+async function saveHomeRate(){const c=CV(),v=toLn(val('hr_v'));if(!(v>0))return errIn('hr_v','نرخ را وارد کنید');if(!rateGuard(v,c))return;await commit(()=>addRate(v,today(),c),`نرخ روز ${CUR[c].n} ثبت شد: ${nf(v)}`);}
+function openRate(c){c=c||CV();const r=lastRate(c);openSheet(`${sheetHead('نرخ روز '+CUR[c].n,'نرخ بازار آزاد (مثلاً از اپ «چند»)')}
+  ${field(`نرخ هر ${CUR[c].n} (تومان)`,money('r_v',r?r.rate:0))}${field('تاریخ',dateIn('r_d',today()))}<button class="btn pri" onclick="saveRate('${c}')">ثبت</button>
+  ${ST.rates.some(x=>x.cur===c)?`<h3 class="sec">نرخ‌های اخیر</h3><div class="list">${ST.rates.filter(x=>x.cur===c).sort((a,b)=>cmpD(b.date,a.date)||b.at-a.at).slice(0,8).map(x=>`<div class="row"><div class="rb"><b>${nf(x.rate)}</b><small>${fmtD(x.date)}</small></div></div>`).join('')}</div>`:''}`);}
+async function saveRate(c){const d=readDate('r_d');if(!d)return errIn('r_d','تاریخ نامعتبر است');const v=toLn(val('r_v'));if(!(v>0))return errIn('r_v','نرخ را وارد کنید');if(!rateGuard(v,c))return;await commit(()=>addRate(v,d,c),'نرخ روز ثبت شد');}
+// ---------------- opening / count ----------------
+function openOpening(c){c=c||CV();const o=ST.openings.find(x=>x.cur===c)||{sahar:0,me:0,cost:0,date:today()};
+  openSheet(`${sheetHead('موجودی اولیهٔ '+CUR[c].n,'ارزی که در شروع کار داشتید')}
+  <div class="g2">${field(LOC.sahar,decIn('o_s',o.sahar))}${field(LOC.me,decIn('o_m',o.me))}</div>
+  ${field('بهای تمام‌شدهٔ کل (تومان)',money('o_cost',o.cost),'جمع تومانی که بابت همین مقدار پرداخت کرده‌اید')}
+  ${field('تاریخ',dateIn('o_d',o.date))}<button class="btn pri" onclick="saveOpening('${c}')">ذخیره</button>`);}
+async function saveOpening(c){const s=toDec(val('o_s')),m=toDec(val('o_m'));const d=readDate('o_d');if(!d)return errIn('o_d','تاریخ نامعتبر است');
+  await commit(()=>{ST.openings=ST.openings.filter(x=>x.cur!==c);if(s||m||toLn(val('o_cost')))ST.openings.push({cur:c,sahar:s,me:m,cost:toLn(val('o_cost')),date:d});ST.started=true;},'موجودی اولیه ثبت شد');}
+function openCount(c,loc){c=c||CV();const v=vault(c);loc=loc||(v.me&&!v.sahar?'me':'sahar');
+  openSheet(`${sheetHead('شمارش صندوق','مقدار واقعیِ ارز را بشمارید و وارد کنید')}
+  ${segPick('c_loc',locOpts(),loc,`$('c_book').textContent=fx(vault('${c}')[segVal('c_loc','sahar')],'${c}')`)}
+  <p class="note">موجودی طبق دفتر: <b id="c_book">${fx(v[loc],c)}</b></p>${field(`${CUR[c].n} شمارش‌شده`,decIn('c_amt',0))}${field('تاریخ',dateIn('c_d',today()))}
+  <button class="btn pri" onclick="saveCount('${c}')">ثبت</button>`);}
+async function saveCount(c){const raw=val('c_amt');const e=toDec(raw);if(!String(raw).trim()||!(e>=0))return errIn('c_amt','عدد را وارد کنید');const d=readDate('c_d');if(!d)return errIn('c_d','تاریخ نامعتبر است');
+  let k;await commit(()=>{k=addCount(e,d,c,segVal('c_loc','sahar'));},'شمارش ثبت شد');if(k&&Math.abs(k.amt-k.expected)>0.001)setTimeout(()=>alert(`اختلاف با دفتر (${LOC[k.loc]}): ${fx(k.amt-k.expected,c)}\nیک معامله، خرج یا جابه‌جایی جا افتاده، یا شمارش دوباره لازم است.`),300);}
+// ---------------- spend abroad / move between places ----------------
+function openSpend(id){const s=id?byId(ST.spends,id):null;const c=s?s.cur:CV();const v=vault(c);const loc=s?s.loc:(v.me>0?'me':'sahar');
+  openSheet(`${sheetHead(s?'ویرایش خرج ارزی':'خرج ارزی','ارزی که مستقیم خرج کرده‌اید؛ در «سرمایه» هزینه ثبت می‌شود')}
+  ${multi()?segPick('s_cur',curOpts(),c,'spCalc()'):''}
+  <div style="margin-top:8px">${segPick('s_loc',locOpts(),loc,'spCalc()')}</div>
+  ${field('مبلغ',decIn('s_amt',s?s.amt:0,'spCalc()'))}<p class="note" id="s_info"></p>
+  ${field('دسته',`<select id="s_cat">${SPEND_CATS.map(k=>`<option${(s?s.cat:'سفر')===k?' selected':''}>${k}</option>`).join('')}</select>`)}
+  ${field('توضیح',`<input id="s_note" value="${esc(s?s.note:'')}" autocomplete="off">`)}
+  ${field('تاریخ',dateIn('s_d',s?s.date:today()))}
+  <button class="btn pri" onclick="saveSpend('${id||''}')">ذخیره</button>
+  ${s?`<button class="btn danger" onclick="delSpend('${id}')">حذف</button>`:''}`);spCalc();}
+function spCalc(){const c=segVal('s_cur','EUR'),l=segVal('s_loc','sahar'),v=vault(c),a=toDec(val('s_amt'));
+  $('s_info').innerHTML=`موجودی ${LOC[l]}: <b>${fx(v[l],c)}</b>${a&&v.avg?` · ≈ <b>${nf(a*v.avg)}</b> تومان به میانگین خرید`:''}`;}
+async function saveSpend(id){const c=segVal('s_cur','EUR'),loc=segVal('s_loc','sahar'),a=toDec(val('s_amt')),d=readDate('s_d');
+  if(!(a>0))return errIn('s_amt','مبلغ را وارد کنید');if(!d)return errIn('s_d','تاریخ نامعتبر است');
+  const old=id?byId(ST.spends,id):null;const bal=vault(c)[loc]+(old&&old.cur===c&&old.loc===loc?old.amt:0);
+  if(a>bal+0.001&&!confirm(`موجودی ${LOC[loc]} در دفتر ${fx(bal,c)} است (کمتر از مبلغ). ثبت شود؟`))return;
+  const x={cur:c,loc,amt:a,date:d,cat:val('s_cat'),note:val('s_note')};
+  await commit(()=>{if(old)Object.assign(old,{cur:c,loc,amt:a,date:d,cat:x.cat,note:x.note.trim()});else addSpend(x);},'خرج ارزی ثبت شد');}
+async function delSpend(id){if(!confirm('این خرج حذف شود؟ (از «سرمایه» هم حذف می‌شود)'))return;await commit(()=>{ST.spends=ST.spends.filter(s=>s.id!==id);},'خرج حذف شد');}
+function openMove(id){const m=id?byId(ST.moves,id):null;const c=m?m.cur:CV();const v=vault(c);const from=m?m.from:(v.sahar>0?'sahar':'me');
+  openSheet(`${sheetHead(m?'ویرایش جابه‌جایی':'جابه‌جایی ارز','بین سحر و خودتان؛ روی بهای تمام‌شده اثری ندارد')}
+  ${multi()?segPick('m_cur',curOpts(),c,'mvInfo()'):''}
+  <div style="margin-top:8px">${segPick('m_from',[['sahar','از سحر ← به خودم'],['me','از خودم ← به سحر']],from,'mvInfo()')}</div>
+  ${field('مقدار',decIn('m_amt',m?m.amt:0))}<p class="note" id="m_info"></p>
+  ${field('توضیح',`<input id="m_note" value="${esc(m?m.note:'')}" autocomplete="off">`)}
+  ${field('تاریخ',dateIn('m_d',m?m.date:today()))}
+  <button class="btn pri" onclick="saveMove('${id||''}')">ذخیره</button>
+  ${m?`<button class="btn danger" onclick="delMove('${id}')">حذف</button>`:''}`);mvInfo();}
+function mvInfo(){const c=segVal('m_cur','EUR'),f=segVal('m_from','sahar');$('m_info').innerHTML=`موجودی ${LOC[f]}: <b>${fx(vault(c)[f],c)}</b>`;}
+async function saveMove(id){const c=segVal('m_cur','EUR'),from=segVal('m_from','sahar'),a=toDec(val('m_amt')),d=readDate('m_d');
+  if(!(a>0))return errIn('m_amt','مقدار را وارد کنید');if(!d)return errIn('m_d','تاریخ نامعتبر است');
+  const old=id?byId(ST.moves,id):null;const bal=vault(c)[from]+(old&&old.cur===c&&old.from===from?old.amt:0);
+  if(a>bal+0.001&&!confirm(`موجودی ${LOC[from]} در دفتر ${fx(bal,c)} است (کمتر از مقدار). ثبت شود؟`))return;
+  await commit(()=>{if(old)Object.assign(old,{cur:c,from,to:from==='me'?'sahar':'me',amt:a,date:d,note:val('m_note').trim()});else addMove({cur:c,from,amt:a,date:d,note:val('m_note')});},'جابه‌جایی ثبت شد');}
+async function delMove(id){if(!confirm('این جابه‌جایی حذف شود؟'))return;await commit(()=>{ST.moves=ST.moves.filter(m=>m.id!==id);},'جابه‌جایی حذف شد');}
 // ---------------- Vault ----------------
 function vVault(){
-  const v=vault(),o=ST.opening,lc=ST.counts.slice().sort((a,b)=>cmpD(b.date,a.date)||b.at-a.at)[0];
-  return `<section class="hero"><div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">صندوق</p>${bridgeReady()?`<button class="info inv" onclick="openBridgeInfo()" aria-label="ارزش در «سرمایه»">ⓘ</button>`:''}</div><p class="hero-n">${eu(v.eur)}</p>
-    <p class="hero-s">بهای تمام‌شده: <b>${nf(v.cost)}</b> تومان · میانگین هر یورو <b>${nf(v.avg)}</b></p></section>
-  <div class="kpis"><div><small>ارزش روز</small><b>${v.mkt?nf(v.value):'—'}</b></div><div><small>سود/زیان ارزش (تحقق‌نیافته)</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':(v.unreal<0?'−':'+')+nf(Math.abs(v.unreal))}</b></div>
+  const c=CV(),v=vault(c),o=ST.openings.find(x=>x.cur===c);
+  const lastC=l=>ST.counts.filter(k=>k.cur===c&&k.loc===l).sort((a,b)=>cmpD(b.date,a.date)||b.at-a.at)[0];
+  const cRow=l=>{const k=lastC(l);if(!k)return '';const okk=Math.abs(k.amt-k.expected)<0.001;
+    return `<div class="row"><span class="ri ${okk?'r-ok':'r-late'}">${svg(okk?'ok':'late')}</span><div class="rb"><b>${LOC[l]}: ${fx(k.amt,c)} در ${fmtD(k.date)}</b><small>${okk?'با دفتر برابر بود ✓':'اختلاف با دفتر: '+fx(k.amt-k.expected,c)}</small></div></div>`;};
+  const sc=v.spendCost;
+  const flow=[...ST.spends.filter(s=>s.cur===c).map(s=>({t:'s',x:s})),...ST.moves.filter(m=>m.cur===c).map(m=>({t:'m',x:m}))]
+    .sort((a,b)=>cmpD(b.x.date,a.x.date)||(b.x.at||0)-(a.x.at||0)).slice(0,12);
+  return `${curSeg()}<section class="hero"><div style="display:flex;justify-content:space-between;align-items:center"><p class="hero-l">صندوق ${CUR[c].n}</p>${bridgeReady()?`<button class="info inv" onclick="openBridgeInfo()" aria-label="ارزش در «سرمایه»">ⓘ</button>`:''}</div><p class="hero-n">${fx(v.amt,c)}</p>
+    <p class="hero-s">${LOC.sahar}: <b>${fx(v.sahar,c)}</b> · ${LOC.me}: <b>${fx(v.me,c)}</b></p>
+    <p class="hero-s">بهای تمام‌شده: <b>${nf(v.cost)}</b> تومان · میانگین هر ${CUR[c].n} <b>${nf(v.avg)}</b></p></section>
+  <div class="kpis" style="margin-top:12px"><div><small>ارزش روز</small><b>${v.mkt?nf(v.value):'—'}</b></div><div><small>سود/زیان ارزش (تحقق‌نیافته)</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':(v.unreal<0?'−':'+')+nf(Math.abs(v.unreal))}</b></div>
    <div><small>سود فروش‌ها (تحقق‌یافته)</small><b>${nf(v.realized)}</b></div><div><small>نرخ روز</small><b>${v.mkt?nf(v.mkt):'—'}</b></div></div>
-  <h3 class="sec">شمارش صندوق <button class="info" onclick="openCountInfo()" aria-label="شمارش صندوق یعنی چه؟">ⓘ</button></h3>${lc?`<div class="row"><span class="ri ${Math.abs(lc.eur-lc.expected)<0.001?'r-ok':'r-late'}">${svg(Math.abs(lc.eur-lc.expected)<0.001?'ok':'late')}</span><div class="rb"><b>${eu(lc.eur)} در ${fmtD(lc.date)}</b><small>${Math.abs(lc.eur-lc.expected)<0.001?'با دفتر برابر بود':'اختلاف با دفتر: '+eu(lc.eur-lc.expected)}</small></div></div>`:'<p class="dim">هنوز شمارشی ثبت نشده.</p>'}
+  <div class="acts"><button class="btn" onclick="openSpend()">💳 خرج ارزی</button><button class="btn" onclick="openMove()">⇄ جابه‌جایی</button></div>
+  ${flow.length?`<h3 class="sec">خرج‌ها و جابه‌جایی‌ها</h3><div class="list">${flow.map(f=>f.t==='s'
+    ?`<button class="row tap" onclick="openSpend('${f.x.id}')"><span class="ri r-late">${svg('spend')}</span><div class="rb"><b>خرج ${fx(f.x.amt,c)} · ${esc(f.x.cat)}</b><small>${fmtD(f.x.date)} · ${LOC[f.x.loc]}${f.x.note?' · '+esc(f.x.note):''} · ≈ ${nf(sc[f.x.id]||0)} تومان</small></div></button>`
+    :`<button class="row tap" onclick="openMove('${f.x.id}')"><span class="ri r-up">${svg('move')}</span><div class="rb"><b>جابه‌جایی ${fx(f.x.amt,c)}</b><small>${fmtD(f.x.date)} · ${f.x.from==='sahar'?'از سحر به خودم':'از خودم به سحر'}${f.x.note?' · '+esc(f.x.note):''}</small></div></button>`).join('')}</div>`:''}
+  <h3 class="sec">شمارش صندوق <button class="info" onclick="openCountInfo()" aria-label="شمارش صندوق یعنی چه؟">ⓘ</button></h3>${(cRow('sahar')+cRow('me'))?`<div class="list">${cRow('sahar')}${cRow('me')}</div>`:'<p class="dim">هنوز شمارشی ثبت نشده.</p>'}
   <div class="acts"><button class="btn" onclick="openCount()">ثبت شمارش</button><button class="btn" onclick="openRate()">نرخ روز</button></div>
-  <h3 class="sec">موجودی اولیه</h3><div class="row"><div class="rb"><b>${o?eu(o.eur)+' · '+nf(o.cost)+' تومان':'ثبت نشده'}</b><small>${o?fmtD(o.date):''}</small></div><div class="ra"><button class="mini" onclick="openOpening()">ویرایش</button></div></div>`;
+  <h3 class="sec">موجودی اولیه</h3><div class="list"><div class="row"><div class="rb"><b>${o?`${LOC.sahar} ${fx(o.sahar,c)} · ${LOC.me} ${fx(o.me,c)}`:'ثبت نشده'}</b><small>${o?nf(o.cost)+' تومان · '+fmtD(o.date):''}</small></div><div class="ra"><button class="mini" onclick="openOpening()">ویرایش</button></div></div></div>`;
 }
-function openBridgeInfo(){openSheet(sheetHead('ارزش یورو در «سرمایه»','چرا با «ارزش روز» این اپ فرق دارد')+bridgeCard());}
+function openBridgeInfo(){openSheet(sheetHead('ارزش ارز در «سرمایه»','چرا با «ارزش روز» این اپ فرق دارد')+bridgeCard());}
 function openCountInfo(){openSheet(`${sheetHead('شمارش صندوق یعنی چه؟')}
-  <p class="note" style="line-height:2">هر چند وقت یک بار، یوروهای داخل صندوق <b>واقعاً شمرده</b> می‌شوند و عدد را این‌جا وارد می‌کنید. اپ آن را با <b>موجودی دفتر</b> (معاملات تأییدشده) مقایسه می‌کند.</p>
-  <p class="note" style="line-height:2">✓ اگر برابر بود، دفتر کامل و درست است.<br>⚠️ اگر فرق داشت، یعنی معامله‌ای ثبت نشده، تأیید یورویی جا افتاده، یا شمارش باید تکرار شود.</p>
+  <p class="note" style="line-height:2">هر چند وقت یک بار، ارزِ هر محل (نزد سحر / نزد خودم) <b>واقعاً شمرده</b> می‌شود و عدد را این‌جا وارد می‌کنید. اپ آن را با <b>موجودی دفتر</b> (معاملات تأییدشده، خرج‌ها و جابه‌جایی‌ها) مقایسه می‌کند.</p>
+  <p class="note" style="line-height:2">✓ اگر برابر بود، دفتر کامل و درست است.<br>⚠️ اگر فرق داشت، یعنی معامله، خرج یا جابه‌جایی‌ای ثبت نشده، تأییدی جا افتاده، یا شمارش باید تکرار شود.</p>
   <button class="btn pri" onclick="openCount()">ثبت شمارش</button>`);}
 function bridgeCard(){
   if(!bridgeReady())return '';const p=bridgeParts();let pub=null;try{pub=JSON.parse(localStorage.getItem('sarafi_pub')||'null');}catch(e){}
   const line=(l,v,sign)=>v?`<div style="display:flex;justify-content:space-between;padding:4px 0"><span>${l}</span><b>${sign}${nf(v)}</b></div>`:'';
   return `<div class="note" style="line-height:1.9">
-    ${line(p.baseAtCost?'یوروهای صندوق (به بهای خرید؛ نرخ روز ثبت نشده)':'یوروهای صندوق به نرخ روز',p.base,'')}
-    ${line('تومانِ پرداخت‌شده برای یوروی هنوز نرسیده',p.paidInTransit,'+ ')}
+    ${p.bases.map(b=>line(`${fx(b.amt,b.c)} ${b.atCost?'(به بهای خرید؛ نرخ روز ثبت نشده)':'به نرخ روز'}`,b.v,'')).join('')}
+    ${line('تومانِ پرداخت‌شده برای ارزِ هنوز نرسیده',p.paidInTransit,'+ ')}
     ${line('تومانی که هنوز بدهکارم',p.owedByMe,'− ')}
     ${line('تومانی که هنوز طلبکارم',p.owedToMe,'+ ')}
-    ${line('تومانِ دریافتی برای یوروی هنوز تحویل‌نشده',p.receivedEarly,'− ')}
-    <div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:6px;padding-top:6px"><span>= حساب «ارز (یورو)» در سرمایه</span><b>${nf(p.target)}</b></div>
-    <small class="dim">${!ghOn()?'پشتیبان GitHub فعال نیست؛ چیزی ارسال نمی‌شود.':pub?(pub.target===p.target?'✓ ارسال شد — ':'⏳ در صف ارسال (حدود ۲۰ ثانیه) — آخرین ارسال: ')+new Date(pub.at).toLocaleString('fa-IR'):'هنوز ارسال نشده'}. «سرمایه» این عدد را دفعهٔ بعد که باز شود می‌گیرد.</small></div>`;
+    ${line('تومانِ دریافتی برای ارزِ هنوز تحویل‌نشده',p.receivedEarly,'− ')}
+    <div style="display:flex;justify-content:space-between;border-top:1px solid var(--line);margin-top:6px;padding-top:6px"><span>= حساب «ارز» در سرمایه</span><b>${nf(p.target)}</b></div>
+    <small class="dim">${!ghOn()?'پشتیبان GitHub فعال نیست؛ چیزی ارسال نمی‌شود.':pub?(pub.target===p.target?'✓ ارسال شد — ':'⏳ در صف ارسال (حدود ۲۰ ثانیه) — آخرین ارسال: ')+new Date(pub.at).toLocaleString('fa-IR'):'هنوز ارسال نشده'}. «سرمایه» این عدد و خرج‌های ارزی را دفعهٔ بعد که باز شود می‌گیرد؛ خرج‌ها آن‌جا «هزینه» ثبت می‌شوند.</small></div>`;
 }
 // ---------------- Report ----------------
 function vReport(){
-  const t=today();const months=[];for(let k=0;k<6;k++){let m=t.m-k,y=t.y;while(m<0){m+=12;y--;}months.push({y,m});}
-  const v=vault();
-  return `<div class="kpis"><div><small>سود فروش‌ها (تحقق‌یافته)</small><b>${nf(v.realized)}</b></div><div><small>سود/زیان ارزش</small><b>${v.unreal==null?'—':(v.unreal<0?'−':'+')+nf(Math.abs(v.unreal))}</b></div></div>
-  <h3 class="sec">شش ماه اخیر</h3><div class="tbl"><table><thead><tr><th>ماه</th><th>یورو گرفتم</th><th>یورو دادم</th></tr></thead><tbody>
-  ${months.map(x=>{const s=monthSummary(x.y,x.m);return `<tr><td>${MFA[x.m]} ${toFa(x.y)}</td><td>${s.buyE?eu(s.buyE)+'<small>'+nf(s.buyT)+'</small>':'—'}</td><td>${s.sellE?eu(s.sellE)+'<small>'+nf(s.sellT)+'</small>':'—'}</td></tr>`;}).join('')}
-  </tbody></table></div><p class="dim">تغییر ارزش یورو تا فروش «تحقق‌نیافته» است و جزو سود حساب نمی‌شود.</p>`;
+  const c=CV(),t=today();const months=[];for(let k=0;k<6;k++){let m=t.m-k,y=t.y;while(m<0){m+=12;y--;}months.push({y,m});}
+  const v=vault(c);const cell=(a,tm)=>a?fx(a,c)+'<small>'+nf(tm)+'</small>':'—';
+  return `${curSeg()}<div class="kpis" style="margin-top:16px"><div><small>سود فروش‌ها (تحقق‌یافته)</small><b>${nf(v.realized)}</b></div><div><small>سود/زیان ارزش</small><b>${v.unreal==null?'—':(v.unreal<0?'−':'+')+nf(Math.abs(v.unreal))}</b></div></div>
+  <h3 class="sec">شش ماه اخیر — ${CUR[c].n}</h3><div class="tbl"><table><thead><tr><th>ماه</th><th>خرید</th><th>فروش</th><th>خرج</th></tr></thead><tbody>
+  ${months.map(x=>{const s=monthSummary(x.y,x.m,c);return `<tr><td>${MFA[x.m]} ${toFa(x.y)}</td><td>${cell(s.buyA,s.buyT)}</td><td>${cell(s.sellA,s.sellT)}</td><td>${cell(s.spA,s.spT)}</td></tr>`;}).join('')}
+  </tbody></table></div><p class="dim">تغییر ارزش ارز تا فروش «تحقق‌نیافته» است و جزو سود حساب نمی‌شود. مبلغ تومانی خرج‌ها به میانگین بهای خرید است.</p>`;
 }
 // ---------------- Settings ----------------
-function openSettings(){const s=ST.settings;openSheet(`${sheetHead('تنظیمات','صرافی '+APP_VERSION)}
+function openSettings(){const s=ST.settings;const hasUsd=multi()&&!s.usd;openSheet(`${sheetHead('تنظیمات','صرافی '+APP_VERSION)}
   ${field('حالت نمایش',`<select id="st_th"><option value="auto"${s.theme==='auto'?' selected':''}>خودکار</option><option value="light"${s.theme==='light'?' selected':''}>روشن</option><option value="dark"${s.theme==='dark'?' selected':''}>تیره</option></select>`)}
+  <label class="f" style="display:flex;align-items:center;gap:10px"><input type="checkbox" id="st_usd" style="width:20px;height:20px"${s.usd?' checked':''}><span style="margin:0">دلار هم دارم (یورو همیشه فعال است)</span></label>
+  ${hasUsd?'<p class="dim">دلار ثبت‌شده دارید؛ تا وقتی رکورد دلاری هست نمایش داده می‌شود.</p>':''}
   <button class="btn pri" onclick="saveSettings()">ذخیره</button>
   <div class="divider"></div><h3 class="sec m0">پشتیبان GitHub (بدون VPN)</h3><p class="dim" id="gh-status">${ghStatusText()}</p><button class="btn" onclick="openGhSheet()">تنظیم پشتیبان GitHub</button>
-  <div class="divider"></div><h3 class="sec m0">اتصال به «سرمایه»</h3><p class="dim">${!ghOn()?'نیاز به پشتیبان GitHub دارد':bridgeReady()?'فعال — ارزش خالص یورو برای حساب «ارز (یورو)» سرمایه ارسال می‌شود':'منتظر ثبت موجودی اولیه یا اولین معاملهٔ تأییدشده؛ تا آن موقع چیزی ارسال نمی‌شود'}</p>
+  <div class="divider"></div><h3 class="sec m0">اتصال به «سرمایه»</h3><p class="dim">${!ghOn()?'نیاز به پشتیبان GitHub دارد':bridgeReady()?'فعال — ارزش خالص ارز برای حساب «ارز» و خرج‌های ارزی به‌عنوان هزینه به سرمایه ارسال می‌شود':'منتظر ثبت موجودی اولیه یا اولین معاملهٔ تأییدشده'}</p>
   <div class="divider"></div><h3 class="sec m0">فایل پشتیبان</h3><div class="acts"><button class="btn" onclick="doBackup()">تهیهٔ فایل پشتیبان</button>
   <label class="btn" style="position:relative">بازیابی از فایل<input type="file" accept=".json,application/json" onchange="restoreFile(this)" style="position:absolute;inset:0;opacity:0"></label></div>`);}
-async function saveSettings(){ST.settings.theme=val('st_th');applyTheme();await sv();closeSheet();ntf('ذخیره شد');}
+async function saveSettings(){ST.settings.theme=val('st_th');ST.settings.usd=!!($('st_usd')&&$('st_usd').checked);if(!multi())ST.settings.cur='EUR';applyTheme();await sv();closeSheet();render();ntf('ذخیره شد');}
 async function downloadOrShare(text,name,mime,title){const file=new File([text],name,{type:mime});
   if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title});return true;}catch(e){if(e.name==='AbortError')return false;}}
   const a=document.createElement('a');a.href=URL.createObjectURL(file);a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),4000);return true;}
-async function doBackup(){const t=today();if(await downloadOrShare(JSON.stringify({type:'sarafi-backup',version:1,exportedAt:Date.now(),state:ST}),`sarafi-backup-${t.y}-${t.m+1}-${t.d}.json`,'application/json','پشتیبان صرافی')){ST.settings.lastBackup=Date.now();await sv();ntf('فایل پشتیبان آماده شد');}}
+async function doBackup(){const t=today();if(await downloadOrShare(JSON.stringify({type:'sarafi-backup',version:2,exportedAt:Date.now(),state:ST}),`sarafi-backup-${t.y}-${t.m+1}-${t.d}.json`,'application/json','پشتیبان صرافی')){ST.settings.lastBackup=Date.now();await sv();ntf('فایل پشتیبان آماده شد');}}
 async function restoreFile(input){try{const f=input.files[0];if(!f)return;const d=JSON.parse(await f.text());if(d.type!=='sarafi-backup'||!d.state)throw new Error('این فایل پشتیبان «صرافی» نیست');
   if(!confirm('همهٔ داده‌های فعلی با فایل پشتیبان جایگزین شود؟'))return;await dbSet('state_before_restore',JSON.parse(JSON.stringify(ST)));ST=normalize(d.state);applyTheme();await sv();closeSheet();render();ntf('بازیابی انجام شد');}
   catch(e){ntf(e.message||'فایل نامعتبر است');}finally{input.value='';}}
@@ -662,8 +713,12 @@ async function sfInboxRemove(id){
 }
 let pubTimer=null;
 async function publishStatus(){
-  if(!ghOn()||!bridgeReady())return false;const v=vault();
-  const st={target:bridgeTarget(),eur:v.eur,mkt:v.mkt,value:v.value,cost:v.cost,ready:true,at:Date.now()};
+  if(!ghOn()||!bridgeReady())return false;const by={};let value=0,cost=0;const sc={};
+  ['EUR','USD'].forEach(c=>{const v=vault(c);sc[c]=v.spendCost;if(!v.amt&&!v.cost)return;by[c]={amt:v.amt,mkt:v.mkt,value:v.value,cost:v.cost};value+=v.value;cost+=v.cost;});
+  const E=vault('EUR');
+  // v2: byCur + the spends (each at its average-cost toman) so «سرمایه» books them as expenses
+  const st={v:2,target:bridgeTarget(),eur:E.amt,mkt:E.mkt,value,cost,byCur:by,
+    spends:ST.spends.map(s=>({id:s.id,date:s.date,cur:s.cur,amt:s.amt,toman:sc[s.cur][s.id]||0,cat:s.cat,note:s.note})),ready:true,at:Date.now()};
   for(let i=0;i<3;i++){const {sha}=await ghFileRead('sarafi-status.json');const p=await ghFileWrite('sarafi-status.json',st,'وضعیت صرافی',sha);if(p.ok){try{localStorage.setItem('sarafi_pub',JSON.stringify({at:st.at,target:st.target}));}catch(e){}if(typeof TAB!=='undefined'&&TAB==='vault')render();return true;}if(p.status!==409&&p.status!==422)return false;}
   return false;
 }
