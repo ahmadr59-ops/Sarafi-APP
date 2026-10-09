@@ -239,7 +239,7 @@ input:not([type=checkbox]):not([type=radio]):not([type=file]),select,textarea{fo
 //   • Guarantee cheques are never payments.
 //   • Partner settlement is on a CASH basis per Jalali year.
 // ============================================================
-const APP_VERSION='v1.5';
+const APP_VERSION='v1.6';
 const FA='۰۱۲۳۴۵۶۷۸۹';
 const MFA=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
 const MSH=['فرو','ارد','خرد','تیر','مرد','شهر','مهر','آبا','آذر','دی','بهم','اسف'];
@@ -429,7 +429,7 @@ function vHome(){
     <div class="hkpis"><div><small>میانگین بهای هر یورو</small><b>${mask(nf(v.avg))}</b></div><div><small>نرخ روز</small><b>${r?nf(r.rate):'—'}</b></div><div><small>سود/زیان ارزش</small><b class="${v.unreal<0?'is-late':''}">${v.unreal==null?'—':mask((v.unreal<0?'−':'+')+nf(Math.abs(v.unreal)))}</b></div></div>
   </section>
   ${rateCard()}
-  ${ST.bridge.length?`<h3 class="sec">پرداخت‌های ارسالی از «سرمایه»</h3><div class="list">${ST.bridge.map(b=>`<button class="row tap" onclick="openSfBridge('${b.id}')"><span class="ri r-up">${svg(b.kind==='pay'?'out':'in')}</span><div class="rb"><b>${b.kind==='pay'?'پرداخت':'دریافت'} ${nf(b.a)} تومان</b><small>${esc(b.bank||'')}${b.acc?' · '+esc(b.acc):''} · ${fmtD(b.date)} — لمس کنید تا به معامله وصل شود</small></div></button>`).join('')}</div>`:''}
+  ${ST.bridge.length?`<h3 class="sec">پرداخت‌های ارسالی از «سرمایه»</h3><div class="list">${ST.bridge.map(b=>`<button class="row tap" onclick="openSfBridge('${b.id}')"><span class="ri r-up">${svg(b.kind==='pay'?'out':'in')}</span><div class="rb"><b>${b.kind==='pay'?'پرداخت':'دریافت'} ${nf(b.a)} تومان</b><small>${esc(b.bank||'')}${b.acc?' · '+esc(b.acc):''} · ${fmtD(b.date)} — ${(m=>m?`<b style="color:var(--ok,#1a8f4c)">✓ ظاهراً در معاملهٔ «${esc(m.d.party||'بدون نام')}» ثبت شده</b>`:'لمس کنید تا به معامله وصل شود')(bridgeMatch(b))}</small></div></button>`).join('')}</div>`:''}
   <h3 class="sec">کارهای من</h3><div class="list">${rows.length?rows.join(''):`<div class="row"><span class="ri r-ok">${svg('ok')}</span><div class="rb"><b>کاری باقی نمانده است</b></div></div>`}</div>
   <h3 class="sec">معاملات باز</h3>${open.length?`<div class="list">${open.map(dealRow).join('')}</div>`:'<p class="dim">معاملهٔ بازی ندارید.</p>'}
   <button class="btn pri" onclick="openDeal()">➕ معاملهٔ جدید</button>`;
@@ -446,12 +446,13 @@ function vDeals(){
   ${L.length?`<div class="list">${L.map(dealRow).join('')}</div>`:`<p class="dim">${DF==='open'?'معاملهٔ بازی ندارید.':'هنوز معامله‌ای ثبت نشده.'}</p>`}
   <button class="btn pri" onclick="openDeal()">➕ معاملهٔ جدید</button>`;
 }
-function openDeal(id){
-  const d=id?byId(ST.deals,id):null;const r=lastRate();const k=d?d.kind:'buy';
+function openDeal(id,bid){
+  const d=id?byId(ST.deals,id):null;const r=lastRate();const bb=(!d&&bid)?ST.bridge.find(x=>x.id===bid):null;const k=d?d.kind:bb?(bb.kind==='pay'?'buy':'sell'):'buy';
   openSheet(`${sheetHead(d?'ویرایش معامله':'معاملهٔ جدید')}
   <div class="seg"><button id="k_buy" class="${k==='buy'?'on':''}" onclick="dk('buy')">یورو می‌گیرم</button><button id="k_sell" class="${k==='sell'?'on':''}" onclick="dk('sell')">یورو می‌دهم</button></div>
   <p class="dim" id="k_hint">${k==='buy'?'سحر یورو را از طرف می‌گیرد؛ شما تومان را می‌پردازید.':'سحر از صندوق به طرف یورو می‌دهد؛ طرف به شما تومان واریز می‌کند.'}</p>
-  ${field('تاریخ',dateIn('d_date',d?d.date:today()))}
+  ${bb?`<p class="note">پس از ذخیره، ${bb.kind==='pay'?'پرداخت':'دریافت'} ${nf(bb.a)} تومان (${fmtD(bb.date)}) از «سرمایه» خودکار به این معامله وصل و از فهرست برداشته می‌شود؛ لازم نیست آن را دستی وارد کنید.</p>`:''}
+  ${field('تاریخ',dateIn('d_date',d?d.date:bb?bb.date:today()))}
   ${field('نام طرف',`<input id="d_party" value="${esc(d?d.party:'')}" autocomplete="off">`)}
   ${field('مقدار یورو',`<input id="d_eur" inputmode="decimal" value="${d?toFa(d.eur):''}" oninput="dCalc()" autocomplete="off">`)}
   ${field('نرخ شما (تومان برای هر یورو)',money('d_rate',d?d.rate:0,'',`dCalc()`),r?`نرخ روز: ${nf(r.rate)} (${fmtD(r.date)})`:'نرخ روز ثبت نشده')}
@@ -460,7 +461,7 @@ function openDeal(id){
   ${field('یادداشت',`<input id="d_note" value="${esc(d?d.note:'')}">`)}
   <button class="btn pri" onclick="saveDeal('${id||''}')">ذخیره</button>
   ${d?`<button class="btn danger" onclick="delDeal('${id}')">حذف معامله</button>`:''}`);
-  window._dk=k;dCalc();
+  window._dk=k;window._bid=bb?bb.id:'';dCalc();
 }
 function dk(k){window._dk=k;$('k_buy').classList.toggle('on',k==='buy');$('k_sell').classList.toggle('on',k==='sell');
   $('k_hint').textContent=k==='buy'?'سحر یورو را از طرف می‌گیرد؛ شما تومان را می‌پردازید.':'سحر از صندوق به طرف یورو می‌دهد؛ طرف به شما تومان واریز می‌کند.';}
@@ -471,7 +472,9 @@ async function saveDeal(id){
   const eur=pEur(),rate=toLn(val('d_rate'));if(!(eur>0))return errIn('d_eur','مقدار یورو را وارد کنید');if(!(rate>0))return errIn('d_rate','نرخ را وارد کنید');
   const x={kind:window._dk,date,party:val('d_party'),eur,rate,mkt:toLn(val('d_mkt')),note:val('d_note')};
   if(id){await commit(()=>{const d=byId(ST.deals,id);Object.assign(d,{kind:x.kind,date,party:x.party.trim(),eur,rate,mkt:x.mkt,note:x.note.trim()});},'معامله ویرایش شد');openDealView(id);}
-  else{let nd;await commit(()=>{nd=addDeal(x);},'معامله ثبت شد');if(nd)openDealView(nd.id);}
+  else{let nd;const bid=window._bid||'';const b=bid?ST.bridge.find(z=>z.id===bid):null;
+    const ok=await commit(()=>{nd=addDeal(x);if(b){addPay(nd.id,{date:b.date,amount:b.a,ref:[b.bank,b.acc].filter(Boolean).join(' · '),force:true});ST.bridge=ST.bridge.filter(z=>z.id!==bid);ST.bridgeDone[bid]=1;}},b?'معامله ثبت شد و پرداخت به آن وصل شد':'معامله ثبت شد');
+    window._bid='';if(ok&&b)sfInboxRemove(bid).catch(()=>{});if(nd)openDealView(nd.id);}
 }
 async function delDeal(id){if(!confirm('این معامله حذف شود؟'))return;await commit(()=>{ST.deals=ST.deals.filter(d=>d.id!==id);},'معامله حذف شد');}
 function openDealView(id){
@@ -498,17 +501,23 @@ async function delPay(id,pid){if(!confirm('این ردیف حذف شود؟'))ret
 async function shareDeal(id){const d=byId(ST.deals,id);const txt=`${kindL(d)}: ${eu(d.eur)}\nنرخ: ${nf(d.rate)} تومان\nمبلغ: ${nf(tom(d))} تومان\nتاریخ: ${fmtD(d.date)}\nپرداخت/دریافت: ${nf(paidT(d))} — مانده ${nf(Math.max(0,remT(d)))}`;
   try{if(navigator.share)await navigator.share({text:txt});else{await navigator.clipboard.writeText(txt);ntf('متن کپی شد');}}catch(e){}}
 // ---------------- v1.1: payments sent from «سرمایه» ----------------
+// v1.6: a payment with the same amount within ±2 days already in a deal → probably entered by hand
+function bridgeMatch(b,dealId){const n=dayNum(b.date);
+  for(const d of ST.deals){if(dealId&&d.id!==dealId)continue;const p=(d.pays||[]).find(p=>Math.abs(p.amount-b.a)<=1&&Math.abs(dayNum(p.date)-n)<=2);if(p)return{d,p};}return null;}
 function openSfBridge(id){
   const b=ST.bridge.find(x=>x.id===id);if(!b)return;const kind=b.kind==='pay'?'buy':'sell';
   const L=ST.deals.filter(d=>d.kind===kind&&remT(d)>0).sort((p,q)=>Math.abs(remT(p)-b.a)-Math.abs(remT(q)-b.a));
   openSheet(`${sheetHead((b.kind==='pay'?'پرداخت ':'دریافت ')+nf(b.a)+' تومان',esc(b.bank||'')+' · '+fmtD(b.date))}
   <p class="dim">این ${b.kind==='pay'?'پرداخت':'دریافت'} مربوط به کدام معامله است؟ معاملهٔ هم‌مبلغ بالای فهرست است.</p>
   ${L.length?`<div class="list">${L.map(d=>`<button class="row tap" onclick="sfAssign('${id}','${d.id}')"><div class="rb"><b>${esc(d.party||'بدون نام')} · ${eu(d.eur)}</b><small>${fmtD(d.date)} · مانده ${nf(remT(d))} تومان${remT(d)===b.a?' · ✓ هم‌مبلغ':''}</small></div></button>`).join('')}</div>`:'<p class="note">معاملهٔ بازی با این نوع نیست. اول معامله را ثبت کنید، بعد دوباره همین‌جا بزنید.</p>'}
-  <div class="acts"><button class="btn" onclick="closeSheet();openDeal()">معاملهٔ جدید</button><button class="btn" onclick="sfIgnore('${id}')">نادیده</button></div>`);
+  ${(m=>m?`<p class="note">✓ پرداختی با همین مبلغ (${fmtD(m.p.date)}) در معاملهٔ «${esc(m.d.party||'بدون نام')} · ${eu(m.d.eur)}» ثبت شده است. اگر همان است، فقط این مورد را ببندید تا دوباره ثبت نشود.</p><button class="btn pri" onclick="sfDone('${id}')">ثبت شده است، ببند</button>`:'')(bridgeMatch(b))}
+  <div class="acts"><button class="btn" onclick="closeSheet();openDeal('','${id}')">معاملهٔ جدید (همین پرداخت به آن وصل می‌شود)</button><button class="btn" onclick="sfIgnore('${id}')">نادیده</button></div>`);
 }
 async function sfAssign(id,dealId){const b=ST.bridge.find(x=>x.id===id);if(!b)return;
+  {const m=bridgeMatch(b,dealId);if(m&&!confirm(`⚠️ در این معامله پرداختی با همین مبلغ (${nf(m.p.amount)} تومان، ${fmtD(m.p.date)}) ثبت شده است.\nدوباره ثبت شود؟\n\n(اگر همان پرداخت است، «لغو» و سپس «ثبت شده است، ببند» را بزنید.)`))return;}
   const ok=await commit(()=>{addPay(dealId,{date:b.date,amount:b.a,ref:[b.bank,b.acc].filter(Boolean).join(' · '),force:true});ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'به معامله وصل شد');
   if(ok)sfInboxRemove(id).catch(()=>{});}
+async function sfDone(id){const ok=await commit(()=>{ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'بسته شد — پرداخت قبلاً در معامله ثبت شده بود');if(ok)sfInboxRemove(id).catch(()=>{});}
 async function sfIgnore(id){const ok=await commit(()=>{ST.bridge=ST.bridge.filter(x=>x.id!==id);ST.bridgeDone[id]=1;},'نادیده گرفته شد');if(ok)sfInboxRemove(id).catch(()=>{});}
 // ---------------- v1.3: today's rate on Home (optional, latest entry always wins) ----------------
 function rateAge(r){if(!r)return'';const dd=dayNum(today())-dayNum(r.date);
